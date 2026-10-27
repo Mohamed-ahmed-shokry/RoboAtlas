@@ -1,0 +1,10 @@
+export function RobotDiagram() {
+  return <svg className="robot-diagram" viewBox="0 0 380 235" fill="none" aria-hidden="true">
+    <defs><pattern id="grid" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="currentColor" opacity=".19" /></pattern><linearGradient id="arm" x1="100" y1="190" x2="265" y2="45" gradientUnits="userSpaceOnUse"><stop stopColor="#78977d"/><stop offset="1" stopColor="#c4dfb3"/></linearGradient></defs>
+    <rect width="380" height="235" fill="url(#grid)" />
+    <g stroke="currentColor" opacity=".22" strokeWidth="1"><ellipse cx="199" cy="196" rx="111" ry="23"/><path d="M54 196h285M199 224V28M76 172l214-85" strokeDasharray="3 5"/><circle cx="199" cy="119" r="75" strokeDasharray="3 6"/></g>
+    <g stroke="url(#arm)" strokeWidth="1.8" strokeLinejoin="round"><path d="M147 189v-11l17-7h45l17 7v11l-17 7h-45z" fill="#24362b"/><path d="M147 178l17 7h45l17-7M164 185v11M209 185v11"/><path d="M171 175v-44l13-6 14 7v44" fill="#26382c"/><path d="M184 125v51M171 131l13 7 14-6"/><path d="M180 128l-35-55 15-14 39 58" fill="#2d4333"/><path d="M145 73l18 2 36 42M163 75l-3-16"/><path d="M151 61l83-25 10 19-79 25" fill="#334c39"/><path d="M151 61l14 10 79-25M165 71v9M234 36l10 10v9"/><path d="M237 40l27 15-5 11-28-15" fill="#304633"/><path d="M262 57l16-2 5 11-7 5M259 63l7 17 11 2 3-9"/><circle cx="185" cy="124" r="15" fill="#263b2e"/><circle cx="185" cy="124" r="7"/><circle cx="156" cy="67" r="11" fill="#304a37"/><circle cx="156" cy="67" r="4"/><circle cx="237" cy="46" r="8" fill="#304a37"/></g>
+    <g stroke="currentColor" strokeWidth="1" opacity=".55"><path d="M273 61h48v-22M185 124h-66l-13 12M198 174h72l15-15"/><circle cx="273" cy="61" r="2" fill="currentColor"/><circle cx="185" cy="124" r="2" fill="currentColor"/></g>
+    <g fill="currentColor" fontSize="8" fontFamily="monospace" letterSpacing="1" opacity=".7"><text x="278" y="30">PERCEIVE</text><text x="53" y="149">UNDERSTAND</text><text x="281" y="153">ACT</text><text x="38" y="38" opacity=".5">FIG. 01 / POSSIBILITY</text></g>
+  </svg>
+}

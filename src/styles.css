@@ -9,17 +9,17 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   color-scheme: dark;
-  --bg: #11151b;
-  --sidebar: #141920;
-  --panel: #181e27;
-  --hover: #1c2531;
-  --border: #2b3543;
-  --text: #e2e8f0;
-  --muted: #a0adbf;
-  --accent: #91b8ee;
-  --accent-soft: #1b2b41;
-  --button: #8bb4eb;
-  --button-text: #102039;
+  --bg: #181818;
+  --sidebar: #151515;
+  --panel: #202020;
+  --hover: #262626;
+  --border: #343434;
+  --text: #e9e9e9;
+  --muted: #aaaaaa;
+  --accent: #d6d6d6;
+  --accent-soft: #292929;
+  --button: #e2e2e2;
+  --button-text: #202020;
   background: var(--bg);
   color: var(--text);
 }
@@ -855,7 +855,7 @@ progress::-moz-progress-bar {
   border-radius: 6px;
 }
 .backup-dialog::backdrop {
-  background: #090e16c9;
+  background: #000000b3;
 }
 .dialog-header {
   display: flex;

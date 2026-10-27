@@ -138,9 +138,6 @@ export default function App() {
           <div className="page-heading">
             <div>
               <h1>Your robotics roadmap</h1>
-              <p className="intro">
-                Robotics and physical AI, one stage at a time.
-              </p>
             </div>
           </div>
           <section className="progress-summary" aria-label="Overall progress">

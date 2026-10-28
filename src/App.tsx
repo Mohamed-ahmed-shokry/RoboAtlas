@@ -165,7 +165,7 @@ export default function App() {
               <p>
                 {next
                   ? `${next.resource.creator} · ${next.resource.format}`
-                  : "Revisit any stage, reflect on your notes, and pick two experiments to try next."}
+                  : "Revisit any stage and pick two experiments to try next."}
               </p>
               {next?.resource.selection && (
                 <p className="continue-selection">{next.resource.selection}</p>
@@ -325,7 +325,6 @@ export default function App() {
                     number={index + 1}
                     expanded={filtering || progress.expanded.includes(stage.id)}
                     completed={progress.completed}
-                    note={progress.notes[stage.id] ?? ""}
                     filters={filters}
                     highlighted={highlighted}
                     onExpand={() => {
@@ -346,12 +345,6 @@ export default function App() {
                       update((previous) => toggleUnits(previous, ids))
                     }
                     onOpen={openUnit}
-                    onNote={(note) =>
-                      update((previous) => ({
-                        ...previous,
-                        notes: { ...previous.notes, [stage.id]: note },
-                      }))
-                    }
                   />
                 ),
             )}

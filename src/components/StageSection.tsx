@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Check, ChevronDown, Lightbulb, PenLine } from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 import type { Stage } from "../data/curriculum";
 import { countProgress } from "../lib/progress";
 import type { Filters } from "../lib/progress";
@@ -10,13 +9,11 @@ interface Props {
   number: number;
   expanded: boolean;
   completed: string[];
-  note: string;
   filters: Filters;
   highlighted: string | null;
   onExpand: () => void;
   onToggle: (ids: string[]) => void;
   onOpen: (id: string) => void;
-  onNote: (note: string) => void;
 }
 
 export function StageSection({
@@ -24,15 +21,12 @@ export function StageSection({
   number,
   expanded,
   completed,
-  note,
   filters,
   highlighted,
   onExpand,
   onToggle,
   onOpen,
-  onNote,
 }: Props) {
-  const [notesOpen, setNotesOpen] = useState(Boolean(note));
   const progress = countProgress(
     stage.resources.flatMap((resource) =>
       resource.units.map((unit) => unit.id),
@@ -91,43 +85,6 @@ export function StageSection({
                 onOpen={onOpen}
               />
             ))}
-          </div>
-          <div className="enough-depth">
-            <Lightbulb size={16} aria-hidden="true" />
-            <p>
-              <strong>Enough depth</strong>
-              {stage.enough}
-            </p>
-          </div>
-          <div className="stage-note">
-            <button
-              className="note-toggle"
-              onClick={() => setNotesOpen(!notesOpen)}
-              aria-expanded={notesOpen}
-              aria-controls={`note-area-${stage.id}`}
-            >
-              <PenLine size={14} aria-hidden="true" />
-              {note ? "Your stage note" : "Add a personal note"}
-              <span>Optional</span>
-            </button>
-            {notesOpen && (
-              <div id={`note-area-${stage.id}`} className="note-area">
-                <label htmlFor={`note-${stage.id}`}>
-                  Interesting / unclear / want to try
-                </label>
-                <textarea
-                  id={`note-${stage.id}`}
-                  value={note}
-                  maxLength={20000}
-                  rows={3}
-                  placeholder="A question, an idea, a robot you want to build…"
-                  onChange={(event) => onNote(event.target.value)}
-                />
-                <span className="note-hint">
-                  Plain text · saved with your progress
-                </span>
-              </div>
-            )}
           </div>
         </div>
       )}

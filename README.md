@@ -1,6 +1,6 @@
 # RoboAtlas
 
-A personal robotics learning dashboard built with React, TypeScript, and Vite: 10 ordered stages, 37 resources, and 60 assigned learning units. Includes manual lesson/group completion, Continue learning, search/content/completion filters, stage notes, dark/light themes, and progress backup/import.
+A personal robotics learning dashboard built with React, TypeScript, and Vite: 10 ordered stages, 37 resources, and 60 assigned learning units. Includes manual lesson/group completion, Continue learning, search/content/completion filters, dark/light themes, and progress backup/import.
 
 ## Run locally
 

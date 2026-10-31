@@ -64,9 +64,6 @@ export function StageSection({
               {progress.count}
               <span className="muted"> / {progress.total}</span>
             </span>
-            <span className="mini-progress">
-              <span style={{ width: `${progress.percent}%` }} />
-            </span>
           </span>
           <ChevronDown className="stage-chevron" size={17} aria-hidden="true" />
         </button>

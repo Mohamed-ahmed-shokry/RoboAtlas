@@ -104,9 +104,6 @@ export default function App() {
       />
       <div className="app-body">
         <header className="topbar">
-          <div className="breadcrumb">
-            <span>Learning roadmap</span>
-          </div>
           <div className="topbar-actions">
             <button
               className="icon-button"
@@ -135,22 +132,22 @@ export default function App() {
           </div>
         </header>
         <main id="main" tabIndex={-1}>
-          <div className="page-heading">
-            <div>
+          <div className="roadmap-summary">
+            <div className="page-heading">
               <h1>Your robotics roadmap</h1>
             </div>
+            <section className="progress-summary" aria-label="Overall progress">
+              <span className="progress-count">
+                <strong>{overall.count}</strong> / {overall.total} units complete
+              </span>
+              <progress
+                value={overall.count}
+                max={overall.total}
+                aria-label="Overall completion"
+              />
+              <span className="progress-percent">{overall.percent}%</span>
+            </section>
           </div>
-          <section className="progress-summary" aria-label="Overall progress">
-            <span className="progress-count">
-              <strong>{overall.count}</strong> / {overall.total} units complete
-            </span>
-            <progress
-              value={overall.count}
-              max={overall.total}
-              aria-label="Overall completion"
-            />
-            <span className="progress-percent">{overall.percent}%</span>
-          </section>
           <section
             className={`continue-card ${!next ? "all-complete" : ""}`}
             aria-label="Continue learning"
@@ -161,26 +158,8 @@ export default function App() {
                   ? `UP NEXT · STAGE ${String(next.stageNumber).padStart(2, "0")}`
                   : `ALL ${overall.total} UNITS COMPLETE`}
               </span>
-              <h2>{next ? next.unit.title : "Roadmap complete"}</h2>
-              <p>
-                {next
-                  ? `${next.resource.creator} · ${next.resource.format}`
-                  : "Revisit any stage and pick two experiments to try next."}
-              </p>
-              {next?.resource.selection && (
-                <p className="continue-selection">{next.resource.selection}</p>
-              )}
-            </div>
-            <div className="continue-actions">
-              {next ? (
-                <>
-                  <button
-                    className="primary-button"
-                    onClick={() => reveal(next.stage.id, next.unit.id)}
-                  >
-                    Continue learning
-                    <ArrowRight size={16} aria-hidden="true" />
-                  </button>
+              <h2>
+                {next ? (
                   <a
                     href={next.resource.url}
                     target="_blank"
@@ -190,10 +169,26 @@ export default function App() {
                       if (event.button === 1) openUnit(next.unit.id);
                     }}
                   >
-                    Open resource
+                    {next.unit.title}
                     <ArrowUpRight size={13} aria-hidden="true" />
                   </a>
-                </>
+                ) : (
+                  "Roadmap complete"
+                )}
+              </h2>
+              {!next && (
+                <p>Revisit any stage and pick two experiments to try next.</p>
+              )}
+            </div>
+            <div className="continue-actions">
+              {next ? (
+                <button
+                  className="primary-button"
+                  onClick={() => reveal(next.stage.id, next.unit.id)}
+                >
+                  Continue learning
+                  <ArrowRight size={16} aria-hidden="true" />
+                </button>
               ) : (
                 <button
                   className="primary-button"
@@ -215,9 +210,8 @@ export default function App() {
           )}
           <div className="roadmap-heading">
             <div>
-              <h2>
-                Roadmap <span>{curriculum.length} stages</span>
-              </h2>
+              <h2 className="sr-only">Roadmap</h2>
+              <span className="stage-total">{curriculum.length} stages</span>
             </div>
             <button
               className="text-button"

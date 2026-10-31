@@ -83,9 +83,6 @@ export function ResourceGroup({
                 <ArrowUpRight size={15} aria-hidden="true" />
               </a>
             </h4>
-            <span className={`tag tag-${resource.label.toLowerCase()}`}>
-              {resource.label}
-            </span>
           </div>
           <div className="resource-meta">
             <span>{resource.creator}</span>
@@ -93,6 +90,9 @@ export function ResourceGroup({
             <span className="format">
               <Icon size={12} aria-hidden="true" />
               {resource.format}
+            </span>
+            <span className={`tag tag-${resource.label.toLowerCase()}`}>
+              {resource.label}
             </span>
             {grouped && (
               <span className="unit-count">

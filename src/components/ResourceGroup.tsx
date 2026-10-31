@@ -67,7 +67,22 @@ export function ResourceGroup({
           data-highlighted={highlighted === next.id}
         >
           <div className="resource-heading">
-            <h4 id={`resource-${resource.id}`}>{resource.title}</h4>
+            <h4 id={`resource-${resource.id}`}>
+              <a
+                className="resource-title-link"
+                href={resource.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Open ${resource.title} in a new tab`}
+                onClick={() => onOpen(next.id)}
+                onAuxClick={(event) => {
+                  if (event.button === 1) onOpen(next.id);
+                }}
+              >
+                {resource.title}
+                <ArrowUpRight size={15} aria-hidden="true" />
+              </a>
+            </h4>
             <span className={`tag tag-${resource.label.toLowerCase()}`}>
               {resource.label}
             </span>
@@ -86,20 +101,6 @@ export function ResourceGroup({
             )}
           </div>
         </div>
-        <a
-          className="open-resource"
-          href={resource.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={`Open ${resource.title} in a new tab`}
-          onClick={() => onOpen(next.id)}
-          onAuxClick={(event) => {
-            if (event.button === 1) onOpen(next.id);
-          }}
-        >
-          <span>Open</span>
-          <ArrowUpRight size={16} aria-hidden="true" />
-        </a>
       </div>
       <div className="resource-body">
         {resource.selection && (
@@ -127,15 +128,16 @@ export function ResourceGroup({
                 className={`lesson ${completed.includes(unit.id) ? "is-complete" : ""}`}
                 data-highlighted={highlighted === unit.id}
               >
-                <label>
+                <label className="lesson-completion">
                   <input
                     type="checkbox"
                     checked={completed.includes(unit.id)}
                     onChange={() => onToggle([unit.id])}
                   />
-                  <span>{unit.title}</span>
+                  <span className="sr-only">{unit.title}</span>
                 </label>
                 <a
+                  className="lesson-link"
                   href={resource.url}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -145,6 +147,7 @@ export function ResourceGroup({
                     if (event.button === 1) onOpen(unit.id);
                   }}
                 >
+                  <span>{unit.title}</span>
                   <ArrowUpRight size={15} aria-hidden="true" />
                 </a>
               </div>

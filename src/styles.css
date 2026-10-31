@@ -575,9 +575,16 @@ progress::-moz-progress-bar {
   margin-top: 5px !important;
 }
 .resource-info {
+  position: relative;
+  display: block;
   flex: 1;
   min-width: 0;
   scroll-margin: 90px;
+}
+.resource-title-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
 }
 .resource-heading {
   display: flex;
@@ -589,6 +596,16 @@ progress::-moz-progress-bar {
   font-size: 18px;
   font-weight: 500;
   line-height: 1.6;
+}
+.resource h4 svg {
+  margin-left: 7px;
+  color: var(--muted);
+  vertical-align: middle;
+}
+.resource-info:hover h4,
+.lesson-link:hover span {
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 .tag {
   padding: 1px 6px;
@@ -616,21 +633,6 @@ progress::-moz-progress-bar {
 }
 .unit-count {
   margin-left: 4px;
-  color: var(--accent);
-}
-.open-resource {
-  display: inline-flex;
-  gap: 3px;
-  align-items: center;
-  justify-content: center;
-  min-width: 44px;
-  min-height: 44px;
-  padding: 5px 4px 7px 8px;
-  color: var(--muted);
-  font-size: 14px;
-  flex-shrink: 0;
-}
-.open-resource:hover {
   color: var(--accent);
 }
 .resource-body {
@@ -673,31 +675,33 @@ progress::-moz-progress-bar {
 .lesson:hover {
   background: var(--hover);
 }
-.lesson label {
+.lesson-completion {
   display: flex;
   align-items: center;
-  gap: 10px;
-  min-width: 0;
-  font-size: 15px;
-  line-height: 1.8;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
   cursor: pointer;
-  flex: 1;
   min-height: 44px;
 }
 .lesson input {
   width: 18px;
   height: 18px;
 }
-.lesson a {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
+.lesson-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+  min-height: 44px;
+  flex: 1;
+  font-size: 15px;
+  line-height: 1.8;
+}
+.lesson-link svg {
   flex-shrink: 0;
   color: var(--muted);
-}
-.lesson a:hover {
-  color: var(--accent);
 }
 .lesson[data-highlighted="true"],
 .resource-info[data-highlighted="true"] {
@@ -706,7 +710,7 @@ progress::-moz-progress-bar {
   border-radius: 2px;
 }
 .is-complete h4,
-.lesson.is-complete label span {
+.lesson.is-complete .lesson-link {
   color: var(--muted);
 }
 .filtered-lessons {
@@ -1174,12 +1178,6 @@ progress::-moz-progress-bar {
   .resource-body {
     padding-left: 0;
   }
-  .open-resource {
-    padding-left: 4px;
-  }
-  .open-resource span {
-    display: none;
-  }
   .selection,
   .resource-context {
     font-size: 14px;
@@ -1188,7 +1186,7 @@ progress::-moz-progress-bar {
     padding-left: 3px;
     padding-right: 0;
   }
-  .lesson label {
+  .lesson-link {
     font-size: 14px;
     gap: 8px;
   }

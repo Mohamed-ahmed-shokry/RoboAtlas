@@ -38,7 +38,7 @@ describe("section-based interface", () => {
         section,
         number: "1.1",
         completed: false,
-        highlighted: false,
+        current: true,
         onToggle: () => {},
         onOpen: () => {},
       }),
@@ -52,7 +52,34 @@ describe("section-based interface", () => {
     expect(html).toContain(section.task);
     expect(html).not.toContain("textarea");
     expect(html).not.toContain("Enough depth");
+    expect(html).toContain('aria-current="step"');
+    expect(html).not.toContain('hidden=""');
   });
+
+  it.each([false, true])(
+    "starts a non-current section collapsed, completed=%s, with a separate details control",
+    (completed) => {
+      const html = renderToStaticMarkup(
+        createElement(SectionRow, {
+          section,
+          number: "1.2",
+          completed,
+          current: false,
+          onToggle: () => {},
+          onOpen: () => {},
+        }),
+      );
+      expect(html).toContain('data-collapsed="true"');
+      expect(html).toContain('hidden=""');
+      expect(html).toContain('aria-expanded="false"');
+      expect(html).toContain('aria-controls="section-body-example-section"');
+      expect(html).toContain(
+        'aria-label="Expand section 1.2: Inspect a feedback loop"',
+      );
+      expect(html).not.toContain('aria-current="step"');
+      expect(html.match(/type="checkbox"/g)).toHaveLength(1);
+    },
+  );
 
   it("keeps stage totals and original numbering when a filter shows one section", () => {
     const first = { ...section, id: "example-first", title: "First section" };
@@ -70,7 +97,7 @@ describe("section-based interface", () => {
         sections: [section],
         expanded: true,
         completed: [first.id],
-        highlighted: section.id,
+        currentSectionId: section.id,
         onExpand: () => {},
         onToggle: () => {},
         onOpen: () => {},
@@ -78,7 +105,7 @@ describe("section-based interface", () => {
     );
     expect(html).toContain("1 of 2 sections complete");
     expect(html).toContain('class="section-number">2.2</span>');
-    expect(html).toContain('data-highlighted="true"');
+    expect(html).toContain('data-current="true"');
     expect(html).not.toContain("First section");
     expect(html.match(/type="checkbox"/g)).toHaveLength(1);
   });

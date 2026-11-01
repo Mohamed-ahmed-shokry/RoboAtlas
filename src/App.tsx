@@ -41,7 +41,6 @@ export default function App() {
   const [active, setActive] = useState(
     () => continueLearning(progress)?.stage.id ?? roadmap[0].id,
   );
-  const [highlighted, setHighlighted] = useState<string | null>(null);
   const [notice, setNotice] = useState("");
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -59,7 +58,6 @@ export default function App() {
   function reveal(stageId: string, sectionId?: string) {
     setFilters(emptyFilters);
     setActive(stageId);
-    setHighlighted(sectionId ?? null);
     update((previous) => ({
       ...previous,
       expanded: [...new Set([...previous.expanded, stageId])],
@@ -313,7 +311,7 @@ export default function App() {
                     sections={sections}
                     expanded={expanded}
                     completed={progress.completed}
-                    highlighted={highlighted}
+                    currentSectionId={next?.section.id ?? null}
                     onExpand={() => {
                       if (filtering) {
                         setFilters(emptyFilters);

@@ -922,9 +922,9 @@ progress::-moz-progress-bar {
   padding: 20px 0;
   scroll-margin-top: 80px;
 }
-.learning-section[data-highlighted="true"] {
-  outline: 1px solid var(--accent);
-  outline-offset: 5px;
+.learning-section[data-current="true"] {
+  background: var(--panel);
+  box-shadow: inset 2px 0 var(--muted);
   border-radius: 3px;
 }
 .learning-section[data-collapsed="true"] {

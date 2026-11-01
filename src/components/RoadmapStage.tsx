@@ -9,7 +9,7 @@ export function RoadmapStage({
   sections,
   expanded,
   completed,
-  highlighted,
+  currentSectionId,
   onExpand,
   onToggle,
   onOpen,
@@ -19,7 +19,7 @@ export function RoadmapStage({
   sections: LearningSection[];
   expanded: boolean;
   completed: string[];
-  highlighted: string | null;
+  currentSectionId: string | null;
   onExpand: () => void;
   onToggle: (id: string) => void;
   onOpen: (id: string) => void;
@@ -67,7 +67,7 @@ export function RoadmapStage({
               section={section}
               number={number + "." + (stage.sections.indexOf(section) + 1)}
               completed={completed.includes(section.id)}
-              highlighted={highlighted === section.id}
+              current={currentSectionId === section.id}
               onToggle={() => onToggle(section.id)}
               onOpen={() => onOpen(section.id)}
             />

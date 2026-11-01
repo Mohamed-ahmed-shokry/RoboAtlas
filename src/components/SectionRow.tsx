@@ -37,19 +37,20 @@ export function SectionRow({
   section,
   number,
   completed,
-  highlighted,
+  current,
   onToggle,
   onOpen,
 }: {
   section: LearningSection;
   number: string;
   completed: boolean;
-  highlighted: boolean;
+  current: boolean;
   onToggle: () => void;
   onOpen: () => void;
 }) {
-  const [reviewOpen, setReviewOpen] = useState(false);
-  const expanded = !completed || reviewOpen;
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const isCurrent = current && !completed;
+  const expanded = isCurrent || detailsOpen;
   const bodyId = "section-body-" + section.id;
 
   return (
@@ -58,7 +59,8 @@ export function SectionRow({
       id={"section-" + section.id}
       tabIndex={-1}
       aria-labelledby={"section-heading-" + section.id}
-      data-highlighted={highlighted}
+      aria-current={isCurrent ? "step" : undefined}
+      data-current={isCurrent}
       data-collapsed={!expanded}
     >
       <div className="section-heading">
@@ -67,7 +69,7 @@ export function SectionRow({
             type="checkbox"
             checked={completed}
             onChange={() => {
-              setReviewOpen(false);
+              setDetailsOpen(false);
               onToggle();
             }}
             aria-label={"Complete section " + number + ": " + section.title}
@@ -77,7 +79,7 @@ export function SectionRow({
           <span className="section-number">{number}</span>{" "}
           <span className="section-title">{section.title}</span>
         </h4>
-        {completed && (
+        {!isCurrent && (
           <button
             type="button"
             className="icon-button section-details-toggle"
@@ -91,7 +93,7 @@ export function SectionRow({
             aria-expanded={expanded}
             aria-controls={bodyId}
             title={expanded ? "Hide details" : "Show details"}
-            onClick={() => setReviewOpen((previous) => !previous)}
+            onClick={() => setDetailsOpen((previous) => !previous)}
           >
             <ChevronRight size={16} aria-hidden="true" />
           </button>

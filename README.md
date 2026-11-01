@@ -26,6 +26,6 @@ Export any existing progress from the local website, open the stable production 
 
 ## Curriculum and Zen
 
-Core curriculum and optional resources live in `src/data/roadmap.ts`. `src/data/curriculum.ts` retains the original curriculum for legacy compatibility. Preserve stable IDs and exact resource selections. Source verification and workload assumptions are internal data; the website displays no study schedules or duration estimates. External resource availability and access terms can change.
+Core curriculum and optional resources live in `src/data/roadmap.ts`. `src/legacy/curriculum.ts` retains the original curriculum for legacy compatibility. Preserve stable IDs and exact resource selections. Source verification and workload assumptions are internal data; the website displays no study schedules or duration estimates. External resource availability and access terms can change.
 
 Open the local URL in Zen and pin the tab in your Robotics workspace or add it to Essentials. Keep the same browser profile/container and URL. The local server must be running; static hosting can provide an always-available URL.

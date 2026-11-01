@@ -2,7 +2,7 @@
 
 ## Project Structure
 
-RoboAtlas is a static React/TypeScript/Vite dashboard. `src/App.tsx` assembles the UI; `src/components/` holds components, `src/data/curriculum.ts` defines the roadmap, and `src/lib/` manages progress and backups. Styles: `src/styles.css`; assets: `public/`; tests: `tests/`. Generated `dist/` and `test-results/` are ignored.
+RoboAtlas is a static React/TypeScript/Vite dashboard. `src/App.tsx` assembles the page; `src/components/` holds UI, `src/data/roadmap.ts` defines the current curriculum, and `src/lib/` manages current progress and backups. Retained version-1 modules live in `src/legacy/`. Styles: `src/styles.css`; assets: `public/`; tests: `tests/`, with historical tests named `legacy-*.test.ts`. Generated `dist/` and `test-results/` are ignored.
 
 ## Build, Test, and Development
 
@@ -18,6 +18,8 @@ Use Node.js 24.x and npm.
 ## Coding Style and Design
 
 Match two-space indentation, double quotes, semicolons, and strict TypeScript. Use PascalCase component filenames, camelCase functions, and explicit kebab-case curriculum IDs. ESLint is configured; no formatter script exists. Keep resources visually prominent, surrounding controls compact, and dependencies and abstractions minimal.
+
+Maintain a neat project structure in every change. Group files by responsibility, use clear names, reuse existing modules, and remove superseded code when compatibility does not require it. Keep legacy code clearly identified and tested. Add folders or split files only when doing so makes the project easier to navigate. Keep structural cleanup in small, logical commits.
 
 ## Testing Guidelines
 

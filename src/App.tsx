@@ -298,6 +298,12 @@ export default function App() {
               const sections = stage.sections.filter((section) =>
                 visibleIds.has(section.id),
               );
+              const stageComplete = stage.sections.every((section) =>
+                progress.completed.includes(section.id),
+              );
+              const expanded =
+                progress.expanded.includes(stage.id) ||
+                (filtering && !stageComplete);
               return (
                 sections.length > 0 && (
                   <RoadmapStage
@@ -305,7 +311,7 @@ export default function App() {
                     stage={stage}
                     number={index + 1}
                     sections={sections}
-                    expanded={filtering || progress.expanded.includes(stage.id)}
+                    expanded={expanded}
                     completed={progress.completed}
                     highlighted={highlighted}
                     onExpand={() => {
@@ -316,15 +322,32 @@ export default function App() {
                       setActive(stage.id);
                       update((previous) => ({
                         ...previous,
-                        expanded:
-                          filtering || previous.expanded.includes(stage.id)
-                            ? previous.expanded.filter((id) => id !== stage.id)
-                            : [...previous.expanded, stage.id],
+                        expanded: expanded
+                          ? previous.expanded.filter((id) => id !== stage.id)
+                          : [...previous.expanded, stage.id],
                       }));
                     }}
-                    onToggle={(id) =>
-                      update((previous) => toggleSections(previous, [id]))
-                    }
+                    onToggle={(id) => {
+                      const finishingStage =
+                        !progress.completed.includes(id) &&
+                        stage.sections.every(
+                          (section) =>
+                            section.id === id ||
+                            progress.completed.includes(section.id),
+                        );
+                      update((previous) => toggleSections(previous, [id]));
+                      if (finishingStage) {
+                        requestAnimationFrame(() => {
+                          const stageButton = document
+                            .getElementById("heading-" + stage.id)
+                            ?.querySelector<HTMLButtonElement>("button");
+                          (
+                            stageButton ??
+                            document.getElementById("roadmap-search")
+                          )?.focus();
+                        });
+                      }
+                    }}
                     onOpen={(id) =>
                       update((previous) => ({ ...previous, lastOpened: id }))
                     }

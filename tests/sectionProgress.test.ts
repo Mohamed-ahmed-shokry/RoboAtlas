@@ -138,6 +138,48 @@ describe("section completion and resume", () => {
     expect(toggleSections(state, ["section-video"]).completed).toEqual([]);
   });
 
+  it("keeps a partially completed stage expanded and collapses it after its final section", () => {
+    const state = {
+      ...defaultProgress(),
+      expanded: ["new-systems", "new-control"],
+    };
+    const partial = toggleSections(state, ["section-video", "section-bundle"]);
+    expect(partial.expanded).toEqual(state.expanded);
+
+    const finished = toggleSections(partial, ["section-task"]);
+    expect(finished.completed).toEqual([
+      "section-video",
+      "section-bundle",
+      "section-task",
+    ]);
+    expect(finished.expanded).toEqual(["new-control"]);
+    expect(state.completed).toEqual([]);
+    expect(state.expanded).toEqual(["new-systems", "new-control"]);
+  });
+
+  it("preserves other manually reopened complete stages when another stage finishes", () => {
+    const state = {
+      ...defaultProgress(),
+      completed: ["section-video", "section-bundle", "section-control"],
+      expanded: ["new-systems", "new-control"],
+    };
+    const finished = toggleSections(state, ["section-task"]);
+    expect(finished.expanded).toEqual(["new-control"]);
+    expect(finished.completed).toContain("section-control");
+  });
+
+  it("leaves a manually reopened stage open when a completed section is unchecked", () => {
+    const state = {
+      ...defaultProgress(),
+      completed: ["section-video", "section-bundle", "section-task"],
+      expanded: ["new-systems"],
+    };
+    const unchecked = toggleSections(state, ["section-task"]);
+    expect(unchecked.completed).not.toContain("section-task");
+    expect(unchecked.expanded).toEqual(["new-systems"]);
+    expect(toggleSections(unchecked, ["section-task"]).expanded).toEqual([]);
+  });
+
   it("prefers a recent unfinished core section and falls back when complete", () => {
     const state = { ...defaultProgress(), lastOpened: "section-control" };
     expect(continueLearning(state)?.section.id).toBe("section-control");

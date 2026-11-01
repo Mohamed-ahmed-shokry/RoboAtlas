@@ -182,6 +182,41 @@ describe("migration against the actual updated roadmap", () => {
 });
 
 describe("core-only resume, filtering, and counts with real content", () => {
+  it("collapses only after all stage sections finish even when the toggle comes from a filtered view", () => {
+    const stage = roadmap.find((item) => item.id === "systems-foundations")!;
+    const state = { ...defaultProgress(), expanded: [stage.id] };
+    const matching = stage.sections.filter((section) =>
+      matchesSection(
+        section,
+        {
+          query: "Sketch a feedback loop",
+          completion: "unfinished",
+          label: "all",
+        },
+        state.completed,
+      ),
+    );
+    expect(matching.map((section) => section.id)).toEqual(["sensor-action-loop"]);
+
+    const matchingIds = matching.map((section) => section.id);
+    const partial = toggleSections(state, matchingIds);
+    const stageIds = stage.sections.map((section) => section.id);
+    expect(countProgress(stageIds, partial.completed)).toMatchObject({
+      count: 1,
+      total: stage.sections.length,
+    });
+    expect(partial.expanded).toEqual([stage.id]);
+
+    const hiddenComplete = {
+      ...state,
+      completed: stageIds.filter((id) => !matchingIds.includes(id)),
+    };
+    const finished = toggleSections(hiddenComplete, matchingIds);
+    expect(countProgress(stageIds, finished.completed).percent).toBe(100);
+    expect(finished.expanded).toEqual([]);
+    expect(continueLearning(finished)?.stage.id).not.toBe(stage.id);
+  });
+
   it("excludes optional resources from completion and from the all-complete calculation", () => {
     expect(optionalResources.length).toBeGreaterThan(0);
     const optionalIds = optionalResources.map((resource) => resource.id);

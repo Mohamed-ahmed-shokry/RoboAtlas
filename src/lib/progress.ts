@@ -276,14 +276,28 @@ export function toggleSections(
   state: ProgressState,
   ids: string[],
 ): ProgressState {
-  const completed = new Set(state.completed);
+  const previouslyCompleted = new Set(state.completed);
+  const completed = new Set(previouslyCompleted);
   const known = ids.filter((id) => sectionIds.has(id));
   const allDone = known.every((id) => completed.has(id));
   for (const id of known) {
     if (allDone) completed.delete(id);
     else completed.add(id);
   }
-  return { ...state, completed: [...completed] };
+  const newlyCompletedStages = new Set(
+    roadmap
+      .filter(
+        (stage) =>
+          stage.sections.every((section) => completed.has(section.id)) &&
+          stage.sections.some((section) => !previouslyCompleted.has(section.id)),
+      )
+      .map((stage) => stage.id),
+  );
+  return {
+    ...state,
+    completed: [...completed],
+    expanded: state.expanded.filter((id) => !newlyCompletedStages.has(id)),
+  };
 }
 
 export function resetProgress(state: ProgressState): ProgressState {

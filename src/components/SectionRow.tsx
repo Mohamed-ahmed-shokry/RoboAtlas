@@ -74,7 +74,8 @@ export function SectionRow({
           />
         </label>
         <h4 id={"section-heading-" + section.id}>
-          <span className="section-number">{number}</span> {section.title}
+          <span className="section-number">{number}</span>{" "}
+          <span className="section-title">{section.title}</span>
         </h4>
         {completed && (
           <button

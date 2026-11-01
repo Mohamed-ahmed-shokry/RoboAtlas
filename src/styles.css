@@ -270,7 +270,7 @@ h1 {
   display: flex;
   gap: 12px;
   align-items: center;
-  width: 260px;
+  width: 220px;
   max-width: 100%;
   font-size: 12px;
 }
@@ -907,6 +907,130 @@ progress::-moz-progress-bar {
   border-radius: 4px;
   padding: 10px 14px;
   font-size: 12px;
+}
+.stage-completion {
+  display: block;
+  font-size: 12px;
+}
+.learning-section {
+  border-top: 1px solid var(--border);
+  padding: 18px 0;
+  scroll-margin-top: 80px;
+}
+.learning-section[data-highlighted="true"] {
+  outline: 1px solid var(--accent);
+  outline-offset: 5px;
+  border-radius: 3px;
+}
+.section-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.section-completion {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  min-height: 40px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.section-completion input {
+  width: 20px;
+  height: 20px;
+}
+.section-heading h4 {
+  min-width: 0;
+  padding-top: 6px;
+  font-size: 18px;
+  line-height: 1.55;
+  font-weight: 600;
+}
+.section-number {
+  margin-right: 10px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.section-body {
+  margin-left: 36px;
+}
+.section-resource + .section-resource {
+  margin-top: 8px;
+}
+.section-resource-link {
+  display: block;
+  padding: 5px 0;
+  min-height: 44px;
+}
+.section-resource-title {
+  display: block;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.section-resource-title svg {
+  display: inline;
+  margin-left: 6px;
+  vertical-align: middle;
+  color: var(--muted);
+}
+.section-resource-creator {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.section-resource-link:hover .section-resource-title {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.section-scope,
+.section-task {
+  font-size: 13px;
+  line-height: 1.75;
+  margin-top: 5px;
+}
+.section-scope {
+  color: var(--muted);
+}
+.section-task {
+  color: var(--text);
+}
+.learning-section.is-complete h4 {
+  color: var(--muted);
+}
+.optional-resources {
+  margin: 24px 0;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  color: var(--muted);
+}
+.optional-resources summary {
+  cursor: pointer;
+  font-size: 12px;
+  padding: 8px 0;
+}
+.optional-resources summary span {
+  margin-left: 8px;
+}
+.optional-resource-list {
+  padding: 8px 0;
+}
+.optional-resource-list .section-resource {
+  border-bottom: 1px solid var(--border);
+  padding: 9px 0;
+}
+.optional-resource-list .section-resource-title {
+  font-size: 14px;
+}
+@media (max-width: 760px) {
+  .section-body {
+    margin-left: 0;
+  }
+  .section-heading h4 {
+    font-size: 17px;
+  }
 }
 @media (max-width: 1100px) {
   .sidebar {

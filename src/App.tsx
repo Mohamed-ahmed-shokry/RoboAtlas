@@ -1,9 +1,7 @@
 import { useState } from "react";
 import {
   ArrowRight,
-  ArrowUpRight,
   ChevronDown,
-  Compass,
   DatabaseBackup,
   ListFilter,
   Moon,
@@ -11,19 +9,20 @@ import {
   Sun,
   X,
 } from "lucide-react";
-import { curriculum, learningUnits } from "./data/curriculum";
+import { coreSections, optionalResources, roadmap } from "./data/roadmap";
 import type { ContentLabel } from "./data/curriculum";
 import {
   continueLearning,
   countProgress,
-  matchesUnit,
-  toggleUnits,
-} from "./lib/progress";
-import type { CompletionFilter, Filters } from "./lib/progress";
-import { useProgress } from "./lib/useProgress";
+  matchesSection,
+  toggleSections,
+} from "./lib/sectionProgress";
+import type { CompletionFilter, Filters } from "./lib/sectionProgress";
+import { useSectionProgress } from "./lib/useSectionProgress";
 import { Sidebar } from "./components/Sidebar";
-import { StageSection } from "./components/StageSection";
-import { BackupDialog } from "./components/BackupDialog";
+import { RoadmapStage } from "./components/RoadmapStage";
+import { ResourceLink } from "./components/SectionRow";
+import { SectionBackupDialog } from "./components/SectionBackupDialog";
 
 const emptyFilters: Filters = { query: "", completion: "all", label: "all" };
 const labels: ContentLabel[] = [
@@ -31,42 +30,33 @@ const labels: ContentLabel[] = [
   "Build",
   "Application",
   "Discussion",
-  "Career",
 ];
+const sectionIds = coreSections.map(({ section }) => section.id);
 
 export default function App() {
-  const { progress, update, warning } = useProgress();
+  const { progress, update, replace, warning } = useSectionProgress();
   const [filters, setFilters] = useState<Filters>(emptyFilters);
   const [active, setActive] = useState(
-    () => continueLearning(progress)?.stage.id ?? curriculum[0].id,
+    () => continueLearning(progress)?.stage.id ?? roadmap[0].id,
   );
   const [highlighted, setHighlighted] = useState<string | null>(null);
   const [notice, setNotice] = useState("");
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const overall = countProgress(
-    learningUnits.map((item) => item.unit.id),
-    progress.completed,
-  );
+  const overall = countProgress(sectionIds, progress.completed);
   const next = continueLearning(progress);
   const filtering =
     filters.query.trim() !== "" ||
     filters.completion !== "all" ||
     filters.label !== "all";
-  const visible = learningUnits.filter((item) =>
-    matchesUnit(
-      item.resource,
-      item.unit.title,
-      item.unit.id,
-      filters,
-      progress.completed,
-    ),
+  const visible = coreSections.filter(({ section }) =>
+    matchesSection(section, filters, progress.completed),
   );
-  const visibleStages = new Set(visible.map((item) => item.stage.id));
+  const visibleIds = new Set(visible.map(({ section }) => section.id));
 
-  function reveal(stageId: string, unitId?: string) {
+  function reveal(stageId: string, sectionId?: string) {
     setFilters(emptyFilters);
     setActive(stageId);
-    setHighlighted(unitId ?? null);
+    setHighlighted(sectionId ?? null);
     update((previous) => ({
       ...previous,
       expanded: [...new Set([...previous.expanded, stageId])],
@@ -75,7 +65,7 @@ export default function App() {
       setNotice("Filters cleared to reveal your place in the full roadmap.");
     requestAnimationFrame(() => {
       const target = document.getElementById(
-        unitId ? `unit-${unitId}` : `stage-${stageId}`,
+        sectionId ? "section-" + sectionId : "stage-" + stageId,
       );
       target?.scrollIntoView({
         behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -83,12 +73,8 @@ export default function App() {
           : "smooth",
         block: "center",
       });
-      if (unitId) target?.focus({ preventScroll: true });
+      if (sectionId) target?.focus({ preventScroll: true });
     });
-  }
-
-  function openUnit(id: string) {
-    update((previous) => ({ ...previous, lastOpened: id }));
   }
 
   return (
@@ -102,7 +88,7 @@ export default function App() {
         onNavigate={reveal}
         storageWarning={Boolean(warning)}
       />
-      <div className="app-body">
+      <div className="app-body section-dashboard">
         <header className="topbar">
           <div className="topbar-actions">
             <button
@@ -113,7 +99,11 @@ export default function App() {
                   theme: previous.theme === "dark" ? "light" : "dark",
                 }))
               }
-              aria-label={`Switch to ${progress.theme === "dark" ? "light" : "dark"} theme`}
+              aria-label={
+                "Switch to " +
+                (progress.theme === "dark" ? "light" : "dark") +
+                " theme"
+              }
             >
               {progress.theme === "dark" ? (
                 <Sun size={17} />
@@ -138,7 +128,7 @@ export default function App() {
             </div>
             <section className="progress-summary" aria-label="Overall progress">
               <span className="progress-count">
-                <strong>{overall.count}</strong> / {overall.total} units complete
+                <strong>{overall.count}</strong> / {overall.total} sections
               </span>
               <progress
                 value={overall.count}
@@ -148,56 +138,27 @@ export default function App() {
               <span className="progress-percent">{overall.percent}%</span>
             </section>
           </div>
-          <section
-            className={`continue-card ${!next ? "all-complete" : ""}`}
-            aria-label="Continue learning"
-          >
+          <section className="continue-card" aria-label="Continue learning">
             <div className="continue-info">
               <span className="card-eyebrow">
                 {next
-                  ? `UP NEXT · STAGE ${String(next.stageNumber).padStart(2, "0")}`
-                  : `ALL ${overall.total} UNITS COMPLETE`}
+                  ? "UP NEXT · " + next.stageNumber + "." + next.sectionNumber
+                  : "ALL CORE SECTIONS COMPLETE"}
               </span>
-              <h2>
-                {next ? (
-                  <a
-                    href={next.resource.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => openUnit(next.unit.id)}
-                    onAuxClick={(event) => {
-                      if (event.button === 1) openUnit(next.unit.id);
-                    }}
-                  >
-                    {next.unit.title}
-                    <ArrowUpRight size={13} aria-hidden="true" />
-                  </a>
-                ) : (
-                  "Roadmap complete"
-                )}
-              </h2>
-              {!next && (
-                <p>Revisit any stage and pick two experiments to try next.</p>
-              )}
+              <h2>{next ? next.section.title : "Roadmap complete"}</h2>
             </div>
             <div className="continue-actions">
-              {next ? (
-                <button
-                  className="primary-button"
-                  onClick={() => reveal(next.stage.id, next.unit.id)}
-                >
-                  Continue learning
-                  <ArrowRight size={16} aria-hidden="true" />
-                </button>
-              ) : (
-                <button
-                  className="primary-button"
-                  onClick={() => reveal(curriculum[0].id)}
-                >
-                  Review the roadmap
-                  <ArrowRight size={16} aria-hidden="true" />
-                </button>
-              )}
+              <button
+                className="primary-button"
+                onClick={() =>
+                  next
+                    ? reveal(next.stage.id, next.section.id)
+                    : reveal(roadmap[0].id)
+                }
+              >
+                {next ? "Continue learning" : "Review the roadmap"}
+                <ArrowRight size={16} aria-hidden="true" />
+              </button>
             </div>
           </section>
           {warning && (
@@ -211,7 +172,7 @@ export default function App() {
           <div className="roadmap-heading">
             <div>
               <h2 className="sr-only">Roadmap</h2>
-              <span className="stage-total">{curriculum.length} stages</span>
+              <span className="stage-total">{roadmap.length} stages</span>
             </div>
             <button
               className="text-button"
@@ -220,13 +181,13 @@ export default function App() {
                 update((previous) => ({
                   ...previous,
                   expanded:
-                    !filtering && previous.expanded.length === curriculum.length
+                    !filtering && previous.expanded.length === roadmap.length
                       ? []
-                      : curriculum.map((stage) => stage.id),
+                      : roadmap.map((stage) => stage.id),
                 }));
               }}
             >
-              {!filtering && progress.expanded.length === curriculum.length
+              {!filtering && progress.expanded.length === roadmap.length
                 ? "Collapse all"
                 : "Expand all"}
               <ChevronDown size={14} aria-hidden="true" />
@@ -236,12 +197,12 @@ export default function App() {
             <div className="search-field">
               <Search size={16} aria-hidden="true" />
               <label className="sr-only" htmlFor="roadmap-search">
-                Search resources, creators, and lessons
+                Search sections, resources, and creators
               </label>
               <input
                 id="roadmap-search"
                 type="search"
-                placeholder="Search resources, creators, lessons…"
+                placeholder="Search sections, resources, creators…"
                 value={filters.query}
                 onChange={(event) =>
                   setFilters((previous) => ({
@@ -296,7 +257,7 @@ export default function App() {
             {filtering && (
               <>
                 <span>
-                  {visible.length} of {overall.total} units match · Overall
+                  {visible.length} of {overall.total} sections match · Overall
                   progress stays {overall.count}/{overall.total}
                 </span>
                 <button
@@ -310,16 +271,19 @@ export default function App() {
             )}
           </div>
           <div className="stages">
-            {curriculum.map(
-              (stage, index) =>
-                visibleStages.has(stage.id) && (
-                  <StageSection
+            {roadmap.map((stage, index) => {
+              const sections = stage.sections.filter((section) =>
+                visibleIds.has(section.id),
+              );
+              return (
+                sections.length > 0 && (
+                  <RoadmapStage
                     key={stage.id}
                     stage={stage}
                     number={index + 1}
+                    sections={sections}
                     expanded={filtering || progress.expanded.includes(stage.id)}
                     completed={progress.completed}
-                    filters={filters}
                     highlighted={highlighted}
                     onExpand={() => {
                       if (filtering) {
@@ -335,18 +299,21 @@ export default function App() {
                             : [...previous.expanded, stage.id],
                       }));
                     }}
-                    onToggle={(ids) =>
-                      update((previous) => toggleUnits(previous, ids))
+                    onToggle={(id) =>
+                      update((previous) => toggleSections(previous, [id]))
                     }
-                    onOpen={openUnit}
+                    onOpen={(id) =>
+                      update((previous) => ({ ...previous, lastOpened: id }))
+                    }
                   />
-                ),
-            )}
+                )
+              );
+            })}
           </div>
           {!visible.length && (
             <div className="empty-state">
               <Search size={28} aria-hidden="true" />
-              <h3>No lessons match these filters.</h3>
+              <h3>No sections match these filters.</h3>
               <p>
                 Try another title or creator, or return to your full roadmap.
               </p>
@@ -358,27 +325,25 @@ export default function App() {
               </button>
             </div>
           )}
-          <footer className="page-footer">
-            <Compass size={16} aria-hidden="true" />
-            <p>
-              An exploration path, with room to change direction.
-              <span>
-                25–30 hours is a planning estimate, including pauses and
-                readings; video runtime is unverified. This path is not a
-                professional qualification.
-              </span>
-            </p>
-            <span>MADE FOR YOUR CURIOSITY</span>
-          </footer>
+          <details className="optional-resources">
+            <summary>
+              Optional resources<span>{optionalResources.length}</span>
+            </summary>
+            <div className="optional-resource-list">
+              {optionalResources.map((resource) => (
+                <ResourceLink key={resource.id} resource={resource} />
+              ))}
+            </div>
+          </details>
           <div className="sr-only" aria-live="polite">
             {notice}
           </div>
         </main>
       </div>
       {settingsOpen && (
-        <BackupDialog
+        <SectionBackupDialog
           progress={progress}
-          onReplace={update}
+          onReplace={replace}
           onClose={() => setSettingsOpen(false)}
         />
       )}

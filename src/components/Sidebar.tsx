@@ -1,6 +1,6 @@
 import { Check, HardDrive, Route } from "lucide-react";
-import { curriculum } from "../data/curriculum";
-import { countProgress } from "../lib/progress";
+import { roadmap } from "../data/roadmap";
+import { countProgress } from "../lib/sectionProgress";
 
 interface Props {
   completed: string[];
@@ -22,14 +22,12 @@ export function Sidebar({
         <span>RoboAtlas</span>
       </a>
       <div className="nav-heading">
-        Roadmap<span>{curriculum.length} stages</span>
+        Roadmap<span>{roadmap.length} stages</span>
       </div>
       <nav aria-label="Roadmap stages">
-        {curriculum.map((stage, index) => {
+        {roadmap.map((stage, index) => {
           const { count, total } = countProgress(
-            stage.resources.flatMap((resource) =>
-              resource.units.map((unit) => unit.id),
-            ),
+            stage.sections.map((section) => section.id),
             completed,
           );
           return (
@@ -66,7 +64,7 @@ export function Sidebar({
           value={active}
           onChange={(event) => onNavigate(event.target.value)}
         >
-          {curriculum.map((stage, index) => (
+          {roadmap.map((stage, index) => (
             <option key={stage.id} value={stage.id}>
               {String(index + 1).padStart(2, "0")} · {stage.shortTitle}
             </option>

@@ -1,6 +1,6 @@
 # RoboAtlas
 
-A personal robotics learning dashboard built with React, TypeScript, and Vite: 10 ordered stages, 37 resources, and 60 assigned learning units. Includes manual lesson/group completion, Continue learning, search/content/completion filters, dark/light themes, and progress backup/import.
+RoboAtlas is a personal robotics learning dashboard built with React, TypeScript, and Vite. The roadmap is organized into stages, core learning sections, and linked resources. Includes section completion, Continue learning, search and filters, dark/light themes, optional resources, and progress backup/import.
 
 ## Run locally
 
@@ -18,14 +18,14 @@ Import the RoboAtlas GitHub repository into a personal Vercel project. Use the r
 
 ## Progress and backups
 
-Progress is saved in localStorage under `roboatlas.progress.v1`. It survives reloads and browser restarts while site data is retained. It does not sync across devices, profiles, or containers. A different protocol, hostname, or port has separate progress. Export before moving to another origin or clearing site data. Progress & backup offers explicit JSON export, validated import with replacement confirmation, and confirmed reset. Backups contain progress, notes, and preferences; no automatic downloads occur.
+Progress is saved in localStorage under `roboatlas.progress.v2`. Completion belongs to core sections; optional resources do not affect totals or Continue learning. Progress survives reloads while site data is retained and does not sync between devices, profiles, containers, or origins. Version-1 progress is migrated conservatively: the original payload, unmatched completions, legacy notes, and preferences are retained. Added exercises are not completed from old video completion alone. Valid version-2 progress takes precedence, including after an uncheck or reset. Explicit JSON export/import supports both backup versions and retains legacy recovery data. Import replacement and reset require confirmation; no automatic downloads occur. Invalid stored data is preserved and blocks ordinary saves until an explicit recovery action.
 
 ## Move existing progress
 
-Export any existing progress from the local website, open the stable production URL, and import the backup there. Verify a completion and a note survive refresh, then pin that URL in Zen. Local, preview, and production origins have separate browser storage. Future deployments preserve progress when the origin, storage schema, and stable lesson IDs stay compatible. Hosting does not add synchronization between browsers or devices.
+Export any existing progress from the local website, open the stable production URL, and import the backup there. Verify a section completion survives refresh, then pin that URL in Zen. Local, preview, and production origins have separate browser storage. Future deployments preserve progress when the origin, storage schema, and stable lesson IDs stay compatible. Hosting does not add synchronization between browsers or devices.
 
 ## Curriculum and Zen
 
-Curriculum content lives in `src/data/curriculum.ts`; preserve stable IDs when editing content. Shared playlist URLs have independent lesson IDs. The 25–30 hour estimate includes reading and pauses and is not verified video runtime. External resource availability and access terms can change.
+Core curriculum and optional resources live in `src/data/roadmap.ts`. `src/data/curriculum.ts` retains the original curriculum for legacy compatibility. Preserve stable IDs and exact resource selections. Source verification and workload assumptions are internal data; the website displays no study schedules or duration estimates. External resource availability and access terms can change.
 
 Open the local URL in Zen and pin the tab in your Robotics workspace or add it to Essentials. Keep the same browser profile/container and URL. The local server must be running; static hosting can provide an always-available URL.

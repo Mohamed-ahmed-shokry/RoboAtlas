@@ -507,17 +507,23 @@ const sources = {
 export const workloadEstimates: Record<string, number> = {};
 
 // Research provenance is internal, not website copy. Conceptual scopes below are
-// grounded in creator chapters or primary companion material, not invented chapters.
+// grounded in published chapters or primary companion material, not invented chapters.
 export const sourceVerification = {
   princeton:
-    "Official Lecture1.pdf: examples/definitions, then anatomy and uncertainty; course administration excluded.",
+    "YouTube automatic chapter boundaries at 18:56.242 (anatomy) and 36:59.349 (logistics), cross-checked with official Lecture1.pdf. Displayed cues use whole seconds; the assigned technical prefix is continuous from 0:00 to 36:59.",
   ros2: "Creator chapters through introductory RViz; later Gazebo/control chapters excluded. Commands use Jazzy references.",
   motors:
     "Creator chapters separate controller/power/open-loop material from encoder feedback and ROS interfaces.",
-  duck: "Creator chapters cover structure, soldering, servo debugging, electrical checks, and wiring.",
+  power:
+    "The article embeds Iye4uVLmj8o (16:33). Its creator chapter at 6:06 begins current; the two video ranges and article ranges meet at that boundary and include the introduction/outro.",
+  duck: "Creator chapter at 7:26 separates two continuous viewing ranges covering the entire 13:57 video, including structure, soldering, servo debugging, and wiring.",
+  encoder:
+    "YouTube automatic chapter at 2:52.800 marks the motor-driver transition. The displayed 2:53 cue divides the complete 9:30 video without claiming a creator-authored chapter.",
+  manipulator:
+    "The official MATLAB YouTube copy has a system-integration transition around 13:01. Exact synchronization with the supplied MathWorks player is unverified, so the website uses that visible demonstration as a start/finish landmark rather than inventing player timestamps.",
   moveit:
     "Creator chapters and companion separate planning/visualization, Task Constructor stages, and complete pick/place.",
-  act: "Official ACT companion Architecture, Training ACT, and Evaluating ACT support conceptual scopes. The full presentation has no creator chapters; caption bodies were unavailable. Scopes are not claimed as official video chapters.",
+  act: "The presentation has no creator chapters. YouTube's automatic Temporal ensembling boundary at 29:07.159 supplies a whole-second study pause at 29:07; both ranges cover the full 55:33 video. The official companion supplies Architecture, Training ACT, and Evaluating ACT reading boundaries.",
   arm: "Creator companion identifies Episodes 5–7 and their recording, logging, training, and deployment portions; the supplied portal is used because individual episode URLs were not exposed.",
   vla: "Creator Architecture, Training, and Fine-tuning Preparation chapters.",
   dataset:
@@ -567,14 +573,14 @@ export const roadmap: RoadmapStage[] = [
         "robot-examples-definitions",
         "Robot examples and definitions",
         [sources.princeton, sources.princetonCourse],
-        "Lecture 1: technical examples through “What is a robot?” Skip course administration.",
+        "Watch 00:00–18:56.",
         ["princeton-lecture-one"],
       ),
       learn(
         "robot-anatomy-uncertainty",
         "Anatomy, feedback, and uncertainty",
         [sources.princeton, sources.princetonCourse],
-        "Lecture 1: “Anatomy of a robotic system” through “What makes robotics hard?”",
+        "Watch 18:56–36:59.",
         ["princeton-lecture-one"],
       ),
       learn(
@@ -610,25 +616,25 @@ export const roadmap: RoadmapStage[] = [
         "motor-control-chain",
         "The motor-control chain",
         [sources.motors],
-        "Study the layered controller chain, drivers, wiring, circuit demonstration, and open-loop motor control; stop before encoder feedback.",
+        "Watch 00:00–15:56.",
       ),
       learn(
         "motor-encoders-software",
         "Encoders and software interfaces",
         [sources.motors],
-        "Study encoder feedback and closed-loop control through the ROS driver and control interface.",
+        "Watch 15:56–25:56.",
       ),
       learn(
         "power-voltage-regulation",
         "Voltage and regulation",
         [sources.power],
-        "Study Power 101 and Voltages for our robot, including the embedded video's matching explanation.",
+        "Watch 00:00–06:06. Read from the beginning to just before “Current in our robot”.",
       ),
       learn(
         "power-current-batteries",
         "Current, batteries, and protection",
         [sources.power],
-        "Study Current in our robot and the remaining battery, capacity, charging, and circuit-planning material.",
+        "Watch 06:06–16:33. Read from “Current in our robot” through “Conclusion”.",
       ),
       learn(
         "rtos-timing",
@@ -647,15 +653,15 @@ export const roadmap: RoadmapStage[] = [
     sections: [
       learn(
         "duck-mechanical-assembly",
-        "A walking robot's mechanical assembly",
+        "Starting a walking-robot build",
         [sources.duck],
-        "Study the Open Duck Mini hardware assembly: printed structure, joints, and component fit. Reproduction is optional.",
+        "Watch 00:00–07:26.",
       ),
       learn(
         "duck-electronics-integration",
         "Electronics, integration, and build failures",
         [sources.duck],
-        "Study the electronics, wiring, and assembly troubleshooting; leave policy training outside this selection.",
+        "Watch 07:26–13:57.",
       ),
       practice(
         "hardware-fault-diagnosis",
@@ -733,13 +739,13 @@ export const roadmap: RoadmapStage[] = [
         "encoder-reading",
         "Reading an encoder",
         [sources.motorEncoder, sources.motorCompanion],
-        "Study encoder signals and position measurement in Parts 1–2 of the companion. Watch the matching video portion; building the circuit is optional.",
+        "Watch 00:00–02:53. Read Parts 1–2 of the companion.",
       ),
       learn(
         "encoder-pid-loop",
         "Closing the motor-position loop",
         [sources.motorEncoder, sources.motorCompanion, sources.motorCode],
-        "Study motor driving and PID position control in the remaining companion sections. Trace target → error → control signal; hardware reproduction is optional.",
+        "Watch 02:53–09:30. Read from Part 3 to the end of the companion.",
       ),
       learn(
         "mpc-concepts",
@@ -808,14 +814,14 @@ export const roadmap: RoadmapStage[] = [
         "manipulator-model-kinematics",
         "Robot descriptions and kinematics",
         [sources.manipulator],
-        "Study robot-description import, forward/inverse kinematics, and waypoint tracking. Observe the demonstrations; reproducing software is optional.",
+        "Start at the beginning of the video; finish immediately before the Simulink system-integration demonstration.",
         ["designing-manipulators"],
       ),
       learn(
         "manipulator-simulation-perception",
         "Simulation and perception integration",
         [sources.manipulator],
-        "Study the later Simscape simulation, supervisory-logic, and perception-integrated manipulation demonstrations.",
+        "Start at the Simulink system-integration demonstration; finish at the end of the video.",
         ["designing-manipulators"],
       ),
       practice(
@@ -844,25 +850,25 @@ export const roadmap: RoadmapStage[] = [
         "ros2-environment-executables",
         "Sourcing and executables",
         [sources.rosCourse],
-        "Watch the introductory environment-sourcing and package-executable chapters. Use Jazzy documentation for installation, not the video's Humble setup.",
+        "Watch 00:00–09:46. Use the Jazzy installation guide for practice.",
       ),
       learn(
         "ros2-nodes-topics",
         "Nodes and topics",
         [sources.rosCourse],
-        "Watch Nodes and Topics; inspect how publishers and subscribers exchange messages.",
+        "Watch 09:46–16:56.",
       ),
       learn(
         "ros2-services-parameters",
         "Services and parameters",
         [sources.rosCourse],
-        "Watch Services and Parameters.",
+        "Watch 16:56–24:24.",
       ),
       learn(
         "ros2-actions",
         "Actions",
         [sources.rosCourse],
-        "Watch Actions; distinguish feedback and cancellation from a service response.",
+        "Watch 24:24–28:02.",
       ),
     ],
   },
@@ -876,25 +882,25 @@ export const roadmap: RoadmapStage[] = [
         "ros2-workspaces-packages",
         "Workspaces, colcon, and packages",
         [sources.rosCourse],
-        "Watch Workspace, colcon Build, and Package Creation.",
+        "Watch 28:02–36:18.",
       ),
       learn(
         "ros2-cpp-publisher",
         "A C++ publisher and subscriber",
         [sources.rosCourse, sources.rosTutorials],
-        "Study the C++ publisher/subscriber example. Use the matching Jazzy tutorial for compatible commands.",
+        "Watch 36:18–44:13. Use the linked Jazzy C++ example for practice.",
       ),
       learn(
         "ros2-python-publisher",
         "A Python publisher and subscriber",
         [sources.rosCourse, sources.rosTutorials],
-        "Study the Python publisher/subscriber example. Compare its message flow with the C++ example.",
+        "Watch 44:13–49:44. Use the linked Jazzy Python example for practice.",
       ),
       learn(
         "ros2-launch-files",
         "Launch files",
         [sources.rosCourse],
-        "Watch the introductory Launch Files chapter; stop before URDF.",
+        "Watch 49:44–51:56.",
       ),
       practice(
         "ros2-environment-readiness",
@@ -922,19 +928,19 @@ export const roadmap: RoadmapStage[] = [
         "ros2-urdf",
         "URDF links and joints",
         [sources.rosCourse],
-        "Watch the introductory URDF chapter.",
+        "Watch 51:56–1:04:49.",
       ),
       learn(
         "ros2-xacro",
         "Xacro",
         [sources.rosCourse],
-        "Watch the introductory Xacro chapter.",
+        "Watch 1:04:49–1:11:23.",
       ),
       learn(
         "ros2-rviz",
         "RViz",
         [sources.rosCourse],
-        "Watch the introductory RViz chapter only. Stop before the advanced simulation/control material.",
+        "Watch 1:11:23–1:17:44.",
       ),
       learn(
         "urdf-drive-model",
@@ -1279,7 +1285,7 @@ export const roadmap: RoadmapStage[] = [
         "moveit-planning-basics",
         "MoveIt planning and visualization",
         [sources.moveit, sources.moveitCompanion, sources.moveitReference],
-        "Study MoveIt Tutorials 1–5 in the companion: RViz quickstart, first C++ project, visualization, and planning around objects. Read the setup explanation; source compilation is optional.",
+        "Watch 00:00–31:24. Read the companion from the beginning to just before “Pick and Place with MoveIt Task Constructor”.",
         undefined,
         45,
       ),
@@ -1287,7 +1293,7 @@ export const roadmap: RoadmapStage[] = [
         "moveit-task-stages",
         "Task Constructor stages and picking",
         [sources.moveit, sources.moveitCompanion],
-        "Study Tasks and Stages and Planning a Pick: generators, propagators, connectors, inverse kinematics, collision permissions, and attachment.",
+        "Watch 31:24–52:34. Read from “Pick and Place with MoveIt Task Constructor” to just before “End-to-end Pick and Place”.",
         undefined,
         40,
       ),
@@ -1295,7 +1301,7 @@ export const roadmap: RoadmapStage[] = [
         "moveit-end-to-end",
         "Connecting pick and place",
         [sources.moveit, sources.moveitCompanion],
-        "Study End-to-end Pick and Place and the remaining code explanation. Trace the stage order; full reproduction is optional.",
+        "Watch 52:34–1:01:54. Read from “End-to-end Pick and Place” through “MoveIt Overall”.",
       ),
       practice(
         "pick-place-trace",
@@ -1341,7 +1347,7 @@ export const roadmap: RoadmapStage[] = [
         "act-architecture",
         "ACT architecture and action chunks",
         [sources.act, sources.actDocs],
-        "Study the presentation's ALOHA/ACT architecture explanation alongside Architecture in the documentation: camera/joint inputs, latent variable, and future action chunks.",
+        "Watch 00:00–29:07. Read the ACT documentation from the beginning to just before “Training ACT”.",
         undefined,
         45,
       ),
@@ -1349,7 +1355,7 @@ export const roadmap: RoadmapStage[] = [
         "act-training-evaluation",
         "ACT training, inference, and evaluation",
         [sources.act, sources.actDocs],
-        "Study the presentation's remaining training, inference, and evaluation discussion alongside Training ACT and Evaluating ACT. No training run is required.",
+        "Watch 29:07–55:33. Read from “Training ACT” through “Evaluating ACT”.",
         undefined,
         45,
       ),
@@ -1575,13 +1581,13 @@ export const roadmap: RoadmapStage[] = [
         "vla-architecture",
         "From language and vision to actions",
         [sources.vla],
-        "Watch the introduction, LLM → VLM → VLA progression, and Architecture chapters.",
+        "Watch 00:00–16:47.",
       ),
       learn(
         "vla-training-workflow",
         "VLA training and fine-tuning preparation",
         [sources.vla],
-        "Watch Training, Fine-tuning Preparation, and the closing discussion. Treat this as explanation, not a required full training run.",
+        "Watch 16:47–35:06.",
       ),
       learn(
         "smolvla-architecture-workflow",

@@ -81,13 +81,90 @@ describe("the updated exploration curriculum", () => {
     expect(find("kalman-observers").scope).toContain("Parts 1 and 2");
     expect(find("kalman-optimal-estimator").scope).toContain("Parts 3 and 4");
     expect(find("kalman-nonlinear").scope).toContain("Part 5");
-    expect(find("ros2-rviz").scope).toContain("Stop before the advanced");
+    expect(find("ros2-rviz").scope).toContain("Watch 1:11:23–1:17:44.");
     expect(find("arm-episode-five").scope).toContain("Episode 5 only");
     expect(find("arm-episode-six").scope).toContain("Episode 6 only");
     expect(find("arm-episode-seven-record").scope).toContain("Episode 7");
     expect(find("arm-episode-seven-deploy").scope).toContain("Episode 7");
     expect(find("walking-rl-problem").scope).toContain("Part 4");
     expect(find("rl-practical-challenges").scope).toContain("Part 5");
+  });
+
+  it("assigns continuous video ranges without gaps, overlaps, or skipped introductions", () => {
+    const partitions = [
+      {
+        ids: ["robot-examples-definitions", "robot-anatomy-uncertainty"],
+        finish: "36:59",
+      },
+      {
+        ids: ["motor-control-chain", "motor-encoders-software"],
+        finish: "25:56",
+      },
+      {
+        ids: ["duck-mechanical-assembly", "duck-electronics-integration"],
+        finish: "13:57",
+      },
+      {
+        ids: ["encoder-reading", "encoder-pid-loop"],
+        finish: "9:30",
+      },
+      {
+        ids: ["power-voltage-regulation", "power-current-batteries"],
+        finish: "16:33",
+      },
+      {
+        ids: [
+          "ros2-environment-executables",
+          "ros2-nodes-topics",
+          "ros2-services-parameters",
+          "ros2-actions",
+          "ros2-workspaces-packages",
+          "ros2-cpp-publisher",
+          "ros2-python-publisher",
+          "ros2-launch-files",
+          "ros2-urdf",
+          "ros2-xacro",
+          "ros2-rviz",
+        ],
+        finish: "1:17:44",
+      },
+      {
+        ids: [
+          "moveit-planning-basics",
+          "moveit-task-stages",
+          "moveit-end-to-end",
+        ],
+        finish: "1:01:54",
+      },
+      {
+        ids: ["act-architecture", "act-training-evaluation"],
+        finish: "55:33",
+      },
+      {
+        ids: ["vla-architecture", "vla-training-workflow"],
+        finish: "35:06",
+      },
+    ];
+    const seconds = (timestamp: string) =>
+      timestamp.split(":").reduce((total, part) => total * 60 + Number(part), 0);
+
+    for (const partition of partitions) {
+      let previousEnd = 0;
+      for (const id of partition.ids) {
+        const range = find(id).scope?.match(/^Watch ([0-9:]+)–([0-9:]+)\./);
+        expect(range, `${id} must name its complete viewing range`).toBeTruthy();
+        const start = seconds(range![1]);
+        const end = seconds(range![2]);
+        expect(start, `${id} must start where the previous section finished`).toBe(
+          previousEnd,
+        );
+        expect(end, `${id} must contain a positive viewing range`).toBeGreaterThan(
+          start,
+        );
+        previousEnd = end;
+      }
+      expect(previousEnd).toBe(seconds(partition.finish));
+    }
   });
 
   it("keeps practical anchors concrete and prevents added work from receiving old completion", () => {

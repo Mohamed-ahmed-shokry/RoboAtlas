@@ -7,6 +7,7 @@ interface Props {
   active: string;
   onNavigate: (id: string) => void;
   storageWarning: boolean;
+  collapsed: boolean;
 }
 
 export function Sidebar({
@@ -14,9 +15,10 @@ export function Sidebar({
   active,
   onNavigate,
   storageWarning,
+  collapsed,
 }: Props) {
   return (
-    <aside className="sidebar">
+    <aside className="sidebar" id="roadmap-sidebar" data-collapsed={collapsed}>
       <a className="brand" href="#main">
         <Route size={23} aria-hidden="true" />
         <span>RoboAtlas</span>

@@ -221,6 +221,9 @@ nav {
   align-items: center;
   gap: 14px;
 }
+.sidebar-toggle {
+  margin-right: auto;
+}
 .icon-button {
   display: grid;
   place-items: center;
@@ -1024,7 +1027,18 @@ progress::-moz-progress-bar {
 .optional-resource-list .section-resource-title {
   font-size: 14px;
 }
+@media (min-width: 761px) {
+  .sidebar[data-collapsed="true"] {
+    display: none;
+  }
+  .app-body.sidebar-collapsed {
+    margin-left: 0;
+  }
+}
 @media (max-width: 760px) {
+  .sidebar-toggle {
+    display: none;
+  }
   .section-body {
     margin-left: 0;
   }

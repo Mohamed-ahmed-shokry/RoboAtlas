@@ -5,6 +5,8 @@ import {
   DatabaseBackup,
   ListFilter,
   Moon,
+  PanelLeftClose,
+  PanelLeftOpen,
   Search,
   Sun,
   X,
@@ -42,6 +44,7 @@ export default function App() {
   const [highlighted, setHighlighted] = useState<string | null>(null);
   const [notice, setNotice] = useState("");
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const overall = countProgress(sectionIds, progress.completed);
   const next = continueLearning(progress);
   const filtering =
@@ -87,9 +90,29 @@ export default function App() {
         active={active}
         onNavigate={reveal}
         storageWarning={Boolean(warning)}
+        collapsed={sidebarCollapsed}
       />
-      <div className="app-body section-dashboard">
+      <div
+        className={
+          "app-body section-dashboard" +
+          (sidebarCollapsed ? " sidebar-collapsed" : "")
+        }
+      >
         <header className="topbar">
+          <button
+            className="icon-button sidebar-toggle"
+            aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            aria-expanded={!sidebarCollapsed}
+            aria-controls="roadmap-sidebar"
+            onClick={() => setSidebarCollapsed((collapsed) => !collapsed)}
+          >
+            {sidebarCollapsed ? (
+              <PanelLeftOpen size={18} aria-hidden="true" />
+            ) : (
+              <PanelLeftClose size={18} aria-hidden="true" />
+            )}
+          </button>
           <div className="topbar-actions">
             <button
               className="icon-button"

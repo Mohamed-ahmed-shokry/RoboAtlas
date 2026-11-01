@@ -1,4 +1,5 @@
-import { ArrowUpRight } from "lucide-react";
+import { useState } from "react";
+import { ArrowUpRight, ChevronRight } from "lucide-react";
 import type { LearningResource, LearningSection } from "../data/roadmap";
 
 export function ResourceLink({
@@ -47,6 +48,10 @@ export function SectionRow({
   onToggle: () => void;
   onOpen: () => void;
 }) {
+  const [reviewOpen, setReviewOpen] = useState(false);
+  const expanded = !completed || reviewOpen;
+  const bodyId = "section-body-" + section.id;
+
   return (
     <article
       className={"learning-section" + (completed ? " is-complete" : "")}
@@ -54,22 +59,44 @@ export function SectionRow({
       tabIndex={-1}
       aria-labelledby={"section-heading-" + section.id}
       data-highlighted={highlighted}
+      data-collapsed={!expanded}
     >
       <div className="section-heading">
         <label className="section-completion">
           <input
             type="checkbox"
             checked={completed}
-            onChange={onToggle}
+            onChange={() => {
+              setReviewOpen(false);
+              onToggle();
+            }}
             aria-label={"Complete section " + number + ": " + section.title}
           />
         </label>
         <h4 id={"section-heading-" + section.id}>
-          <span className="section-number">{number}</span>{" "}
-          {section.title}
+          <span className="section-number">{number}</span> {section.title}
         </h4>
+        {completed && (
+          <button
+            type="button"
+            className="icon-button section-details-toggle"
+            aria-label={
+              (expanded ? "Collapse" : "Expand") +
+              " section " +
+              number +
+              ": " +
+              section.title
+            }
+            aria-expanded={expanded}
+            aria-controls={bodyId}
+            title={expanded ? "Hide details" : "Show details"}
+            onClick={() => setReviewOpen((previous) => !previous)}
+          >
+            <ChevronRight size={16} aria-hidden="true" />
+          </button>
+        )}
       </div>
-      <div className="section-body">
+      <div className="section-body" id={bodyId} hidden={!expanded}>
         {section.resources.map((resource) => (
           <ResourceLink key={resource.id} resource={resource} onOpen={onOpen} />
         ))}

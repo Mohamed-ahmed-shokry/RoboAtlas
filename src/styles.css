@@ -925,6 +925,9 @@ progress::-moz-progress-bar {
   outline-offset: 5px;
   border-radius: 3px;
 }
+.learning-section[data-collapsed="true"] {
+  padding: 8px 0;
+}
 .section-heading {
   display: flex;
   align-items: flex-start;
@@ -943,6 +946,7 @@ progress::-moz-progress-bar {
   height: 20px;
 }
 .section-heading h4 {
+  flex: 1;
   min-width: 0;
   padding-top: 6px;
   font-size: 20px;
@@ -958,6 +962,13 @@ progress::-moz-progress-bar {
 }
 .section-body {
   margin-left: 36px;
+}
+.section-details-toggle {
+  flex-shrink: 0;
+  margin-left: auto;
+}
+.section-details-toggle[aria-expanded="true"] svg {
+  transform: rotate(90deg);
 }
 .section-resource + .section-resource {
   margin-top: 10px;

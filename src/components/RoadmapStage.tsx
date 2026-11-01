@@ -1,6 +1,6 @@
 import { ChevronDown } from "lucide-react";
 import type { LearningSection, RoadmapStage as Stage } from "../data/roadmap";
-import { countProgress } from "../lib/sectionProgress";
+import { countProgress } from "../lib/progress";
 import { SectionRow } from "./SectionRow";
 
 export function RoadmapStage({

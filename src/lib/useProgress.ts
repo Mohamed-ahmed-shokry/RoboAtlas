@@ -5,8 +5,8 @@ import {
   persistMigration,
   saveProgress,
   validateProgress,
-} from "./sectionProgress";
-import type { ProgressState } from "./sectionProgress";
+} from "./progress";
+import type { ProgressState } from "./progress";
 
 function readInitialProgress() {
   try {
@@ -22,7 +22,7 @@ function readInitialProgress() {
   }
 }
 
-export function useSectionProgress() {
+export function useProgress() {
   const [initial] = useState(readInitialProgress);
   const [progress, setProgress] = useState(initial.state);
   const [warning, setWarning] = useState(initial.warning);

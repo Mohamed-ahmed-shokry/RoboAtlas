@@ -3,7 +3,7 @@ import {
   curriculum as legacyCurriculum,
   learningUnits as legacyLearningUnits,
   unitIds as legacyUnitIds,
-} from "../src/data/curriculum";
+} from "../src/legacy/curriculum";
 import { coreSections, optionalResources, roadmap } from "../src/data/roadmap";
 import {
   continueLearning,
@@ -20,7 +20,7 @@ import {
   STORAGE_KEY,
   toggleSections,
   validateProgress,
-} from "../src/lib/sectionProgress";
+} from "../src/lib/progress";
 
 function legacyProgress(completed: string[] = []) {
   return {

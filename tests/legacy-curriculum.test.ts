@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { curriculum, learningUnits } from "../src/data/curriculum";
+import { curriculum, learningUnits } from "../src/legacy/curriculum";
 
 describe("the supplied roadmap", () => {
   it("has ten ordered stages with exactly the expected 60 units", () => {

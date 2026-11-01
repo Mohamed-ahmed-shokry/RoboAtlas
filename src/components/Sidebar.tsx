@@ -1,6 +1,6 @@
 import { Check, HardDrive, Route } from "lucide-react";
 import { roadmap } from "../data/roadmap";
-import { countProgress } from "../lib/sectionProgress";
+import { countProgress } from "../lib/progress";
 
 interface Props {
   completed: string[];

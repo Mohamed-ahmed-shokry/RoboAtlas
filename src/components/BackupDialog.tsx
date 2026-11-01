@@ -5,10 +5,10 @@ import {
   importBackup,
   MAX_BACKUP_BYTES,
   resetProgress,
-} from "../lib/sectionProgress";
-import type { ProgressState } from "../lib/sectionProgress";
+} from "../lib/progress";
+import type { ProgressState } from "../lib/progress";
 
-export function SectionBackupDialog({
+export function BackupDialog({
   progress,
   onReplace,
   onClose,

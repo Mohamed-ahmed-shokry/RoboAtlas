@@ -1,5 +1,5 @@
-import { curriculum as legacyCurriculum } from "./curriculum";
-import type { ContentLabel } from "./curriculum";
+import { curriculum as legacyCurriculum } from "../legacy/curriculum";
+import type { ContentLabel } from "../legacy/curriculum";
 
 export interface LearningResource {
   id: string;

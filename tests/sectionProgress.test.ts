@@ -17,7 +17,7 @@ import {
   STORAGE_KEY,
   toggleSections,
   validateProgress,
-} from "../src/lib/sectionProgress";
+} from "../src/lib/progress";
 
 // Isolate storage rules from later curriculum edits; real-content coverage has its own tests.
 vi.mock("../src/data/roadmap", () => {

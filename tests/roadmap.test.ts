@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { curriculum as legacyCurriculum } from "../src/data/curriculum";
+import { curriculum as legacyCurriculum } from "../src/legacy/curriculum";
 import {
   coreSections,
   optionalResources,

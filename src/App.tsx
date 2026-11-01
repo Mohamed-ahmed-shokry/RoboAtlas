@@ -12,19 +12,19 @@ import {
   X,
 } from "lucide-react";
 import { coreSections, optionalResources, roadmap } from "./data/roadmap";
-import type { ContentLabel } from "./data/curriculum";
+import type { ContentLabel } from "./legacy/curriculum";
 import {
   continueLearning,
   countProgress,
   matchesSection,
   toggleSections,
-} from "./lib/sectionProgress";
-import type { CompletionFilter, Filters } from "./lib/sectionProgress";
-import { useSectionProgress } from "./lib/useSectionProgress";
+} from "./lib/progress";
+import type { CompletionFilter, Filters } from "./lib/progress";
+import { useProgress } from "./lib/useProgress";
 import { Sidebar } from "./components/Sidebar";
 import { RoadmapStage } from "./components/RoadmapStage";
 import { ResourceLink } from "./components/SectionRow";
-import { SectionBackupDialog } from "./components/SectionBackupDialog";
+import { BackupDialog } from "./components/BackupDialog";
 
 const emptyFilters: Filters = { query: "", completion: "all", label: "all" };
 const labels: ContentLabel[] = [
@@ -36,7 +36,7 @@ const labels: ContentLabel[] = [
 const sectionIds = coreSections.map(({ section }) => section.id);
 
 export default function App() {
-  const { progress, update, replace, warning } = useSectionProgress();
+  const { progress, update, replace, warning } = useProgress();
   const [filters, setFilters] = useState<Filters>(emptyFilters);
   const [active, setActive] = useState(
     () => continueLearning(progress)?.stage.id ?? roadmap[0].id,
@@ -364,7 +364,7 @@ export default function App() {
         </main>
       </div>
       {settingsOpen && (
-        <SectionBackupDialog
+        <BackupDialog
           progress={progress}
           onReplace={replace}
           onClose={() => setSettingsOpen(false)}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { curriculum, learningUnits } from "../src/data/curriculum";
+import { curriculum, learningUnits } from "../src/legacy/curriculum";
 import {
   continueLearning,
   countProgress,
@@ -12,7 +12,7 @@ import {
   STORAGE_KEY,
   toggleUnits,
   validateProgress,
-} from "../src/lib/progress";
+} from "../src/legacy/progress";
 
 describe("completion and continuing", () => {
   it("counts units, handles partial groups, toggles all, and unchecks all", () => {

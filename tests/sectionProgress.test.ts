@@ -90,7 +90,6 @@ vi.mock("../src/data/roadmap", () => {
         sectionNumber: sectionIndex + 1,
       })),
     ),
-    optionalResources: [{ ...video, id: "optional-hoop" }],
   };
 });
 

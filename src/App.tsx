@@ -11,7 +11,7 @@ import {
   Sun,
   X,
 } from "lucide-react";
-import { coreSections, optionalResources, roadmap } from "./data/roadmap";
+import { coreSections, roadmap } from "./data/roadmap";
 import type { ContentLabel } from "./legacy/curriculum";
 import {
   continueLearning,
@@ -23,7 +23,6 @@ import type { CompletionFilter, Filters } from "./lib/progress";
 import { useProgress } from "./lib/useProgress";
 import { Sidebar } from "./components/Sidebar";
 import { RoadmapStage } from "./components/RoadmapStage";
-import { ResourceLink } from "./components/SectionRow";
 import { BackupDialog } from "./components/BackupDialog";
 
 const emptyFilters: Filters = { query: "", completion: "all", label: "all" };
@@ -369,16 +368,6 @@ export default function App() {
               </button>
             </div>
           )}
-          <details className="optional-resources">
-            <summary>
-              Optional resources<span>{optionalResources.length}</span>
-            </summary>
-            <div className="optional-resource-list">
-              {optionalResources.map((resource) => (
-                <ResourceLink key={resource.id} resource={resource} />
-              ))}
-            </div>
-          </details>
           <footer className="profile-links" aria-label="Author profiles">
             <a
               href="https://github.com/Mohamed-ahmed-shokry"

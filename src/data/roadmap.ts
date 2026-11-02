@@ -1,4 +1,3 @@
-import { curriculum as legacyCurriculum } from "../legacy/curriculum";
 import type { ContentLabel } from "../legacy/curriculum";
 
 export interface LearningResource {
@@ -506,6 +505,48 @@ const sources = {
     "MathWorks",
     "https://www.mathworks.com/videos/series/making-vehicles-and-robots-see-getting-started-with-perception-for-students.html",
   ),
+  robotDogBuild: resource(
+    "robot-dog-build",
+    "Robot Dog V3: 3D Printed & Open Source #1",
+    "James Bruton",
+    "https://www.youtube.com/watch?v=yXA_KeuYpCY",
+    "Build",
+  ),
+  openDogWalking: resource(
+    "opendog-walk",
+    "openDog V3: How I made it Walk",
+    "James Bruton",
+    "https://www.youtube.com/watch?v=eKZIJwJBjEs",
+    "Build",
+  ),
+  balancingBike: resource(
+    "balancing-bike",
+    "Omni-Wheel Balancing Robot Bike",
+    "James Bruton · Arduino",
+    "https://blog.arduino.cc/2022/02/26/james-brutons-strange-bicycle-robot-self-balances-with-an-omni-wheel/",
+    "Build",
+  ),
+  ingenuity: resource(
+    "mars-helicopter",
+    "How this helicopter survived 1004 days on Mars…",
+    "Veritasium",
+    "https://www.youtube.com/watch?v=20vUNgRdB4o",
+    "Application",
+  ),
+  stretch: resource(
+    "stretch-dhl",
+    "Stretch at DHL",
+    "Boston Dynamics / DHL",
+    "https://bostondynamics.com/case-studies/stretch-at-dhl/",
+    "Application",
+  ),
+  atlasLearning: resource(
+    "atlas-learning",
+    "How does Atlas learn?",
+    "Boston Dynamics",
+    "https://bostondynamics.com/video/how-does-atlas-learn-inside-the-lab/",
+    "Application",
+  ),
   physicalAiConcepts: resource(
     "physical-ai-intro",
     "What Is Physical AI?",
@@ -700,6 +741,14 @@ export const roadmap: RoadmapStage[] = [
         undefined,
         20,
       ),
+      learn(
+        "opendog-hardware-design",
+        "Actuators and transmissions in a robot dog",
+        [sources.robotDogBuild],
+        "Watch the complete Part 1 build video.",
+        ["robot-dog-v3-one"],
+        45,
+      ),
     ],
   },
   {
@@ -781,6 +830,14 @@ export const roadmap: RoadmapStage[] = [
         "Model predictive control",
         [sources.mpc],
         "Watch Parts 1 and 2 only: Why Use MPC? and What Is MPC?",
+      ),
+      learn(
+        "balancing-bike-feedback",
+        "Feedback in a self-balancing robot",
+        [sources.balancingBike],
+        "Read the article and watch its embedded video in full.",
+        ["omni-wheel-bike"],
+        35,
       ),
     ],
   },
@@ -1356,6 +1413,14 @@ export const roadmap: RoadmapStage[] = [
         undefined,
         20,
       ),
+      learn(
+        "warehouse-manipulation-case-study",
+        "Perception and grasping in a warehouse",
+        [sources.stretch],
+        "Read the complete case study and watch its embedded video.",
+        ["stretch-warehouse"],
+        25,
+      ),
     ],
   },
   {
@@ -1544,6 +1609,14 @@ export const roadmap: RoadmapStage[] = [
         undefined,
         20,
       ),
+      learn(
+        "atlas-learned-behaviors",
+        "Learning whole-body robot behaviors",
+        [sources.atlasLearning],
+        "Watch the complete How does Atlas learn? video.",
+        ["atlas-inside-lab"],
+        30,
+      ),
     ],
   },
   {
@@ -1565,6 +1638,22 @@ export const roadmap: RoadmapStage[] = [
         [sources.drone],
         "Watch How Do You Get a Drone to Hover?",
         ["drone-hover"],
+      ),
+      learn(
+        "ingenuity-flight-case-study",
+        "Autonomous flight on Mars",
+        [sources.ingenuity],
+        "Watch the complete video.",
+        ["ingenuity-mars-mission"],
+        50,
+      ),
+      learn(
+        "opendog-gait-design",
+        "Generating a walking gait",
+        [sources.openDogWalking],
+        "Watch the complete openDog V3: How I made it Walk video.",
+        ["opendog-v3-walking"],
+        45,
       ),
       learn(
         "walking-rl-problem",
@@ -1717,33 +1806,3 @@ export const coreSections = roadmap.flatMap((stage, stageIndex) =>
     sectionNumber: sectionIndex + 1,
   })),
 );
-
-const optionalLegacyResourceIds = new Set([
-  "ros-overview",
-  "begin-robotics",
-  "robot-dog-build",
-  "opendog-walk",
-  "balancing-bike",
-  "meet-ethan",
-  "mars-helicopter",
-  "stretch-dhl",
-  "agri-robotics",
-  "atlas-learning",
-  "jim-fan-challenge",
-  "meet-tom",
-  "better-robots",
-]);
-
-export const optionalResources: LearningResource[] = [
-  ...legacyCurriculum
-    .flatMap((stage) => stage.resources)
-    .filter((item) => optionalLegacyResourceIds.has(item.id))
-    .map((item) => ({
-      id: item.id,
-      title: item.title,
-      creator: item.creator,
-      url: item.url,
-      label: item.label,
-      scope: item.selection,
-    })),
-];

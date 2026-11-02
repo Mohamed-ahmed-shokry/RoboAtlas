@@ -921,7 +921,7 @@ progress::-moz-progress-bar {
 }
 .learning-section {
   border-top: 1px solid var(--border);
-  padding: 20px 0;
+  padding: 24px 16px;
   scroll-margin-top: 80px;
 }
 .learning-section[data-current="true"] {
@@ -929,12 +929,12 @@ progress::-moz-progress-bar {
   border-radius: 6px;
 }
 .learning-section[data-collapsed="true"] {
-  padding: 6px 0;
+  padding: 8px 16px;
 }
 .section-heading {
   display: flex;
   align-items: flex-start;
-  gap: 8px;
+  gap: 10px;
 }
 .section-completion {
   display: grid;
@@ -968,7 +968,8 @@ progress::-moz-progress-bar {
   white-space: nowrap;
 }
 .section-body {
-  margin-left: 36px;
+  margin-top: 8px;
+  margin-left: 38px;
 }
 .section-details-toggle {
   flex-shrink: 0;
@@ -979,6 +980,9 @@ progress::-moz-progress-bar {
 }
 .section-resource + .section-resource {
   margin-top: 10px;
+}
+.learning-section .section-resource + .section-resource {
+  margin-top: 16px;
 }
 .section-resource-link {
   display: block;
@@ -1002,6 +1006,9 @@ progress::-moz-progress-bar {
   font-size: 13px;
   line-height: 1.6;
 }
+.learning-section .section-resource-creator {
+  margin-top: 4px;
+}
 .section-resource-link:hover .section-resource-title {
   text-decoration: underline;
   text-underline-offset: 4px;
@@ -1011,6 +1018,10 @@ progress::-moz-progress-bar {
   font-size: 14px;
   line-height: 1.75;
   margin-top: 5px;
+}
+.learning-section .section-scope,
+.learning-section .section-task {
+  margin-top: 10px;
 }
 .section-scope {
   color: var(--muted);
@@ -1064,6 +1075,12 @@ progress::-moz-progress-bar {
 @media (max-width: 760px) {
   .sidebar-toggle {
     display: none;
+  }
+  .learning-section {
+    padding: 20px 10px;
+  }
+  .learning-section[data-collapsed="true"] {
+    padding: 8px 10px;
   }
   .section-body {
     margin-left: 0;

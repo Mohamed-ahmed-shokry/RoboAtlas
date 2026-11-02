@@ -929,7 +929,11 @@ progress::-moz-progress-bar {
 }
 .learning-section[data-current="true"] {
   background: var(--current-bg);
+  border-bottom: 1px solid var(--border);
   border-radius: 6px;
+}
+.learning-section[data-current="true"] + .learning-section {
+  border-top: 0;
 }
 .learning-section[data-current="true"] h4 {
   font-size: 20px;

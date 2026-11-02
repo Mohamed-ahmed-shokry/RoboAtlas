@@ -920,21 +920,29 @@ progress::-moz-progress-bar {
   font-size: 12px;
 }
 .learning-section {
+  display: grid;
+  grid-template-columns: 28px 2rem minmax(0, 1fr) auto;
+  column-gap: 10px;
   border-top: 1px solid var(--border);
-  padding: 24px 16px;
+  padding: 20px 16px;
   scroll-margin-top: 80px;
 }
 .learning-section[data-current="true"] {
   background: var(--current-bg);
   border-radius: 6px;
 }
+.learning-section[data-current="true"] h4 {
+  font-size: 20px;
+  font-weight: 600;
+}
 .learning-section[data-collapsed="true"] {
   padding: 8px 16px;
 }
 .section-heading {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  align-items: start;
 }
 .section-completion {
   display: grid;
@@ -950,15 +958,14 @@ progress::-moz-progress-bar {
 }
 .section-heading h4 {
   display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
+  grid-column: 2 / 4;
+  grid-template-columns: subgrid;
   align-items: baseline;
-  column-gap: 10px;
-  flex: 1;
   min-width: 0;
   padding-top: 6px;
-  font-size: 20px;
+  font-size: 18px;
   line-height: 1.55;
-  font-weight: 600;
+  font-weight: 500;
 }
 .section-number {
   font-size: 16px;
@@ -967,13 +974,17 @@ progress::-moz-progress-bar {
   color: var(--muted);
   white-space: nowrap;
 }
+.section-title {
+  overflow-wrap: anywhere;
+}
 .section-body {
+  grid-column: 3 / -1;
+  min-width: 0;
   margin-top: 8px;
-  margin-left: 38px;
 }
 .section-details-toggle {
-  flex-shrink: 0;
-  margin-left: auto;
+  grid-column: 4;
+  justify-self: end;
 }
 .section-details-toggle[aria-expanded="true"] svg {
   transform: rotate(90deg);
@@ -982,7 +993,7 @@ progress::-moz-progress-bar {
   margin-top: 10px;
 }
 .learning-section .section-resource + .section-resource {
-  margin-top: 16px;
+  margin-top: 12px;
 }
 .section-resource-link {
   display: block;
@@ -1021,7 +1032,7 @@ progress::-moz-progress-bar {
 }
 .learning-section .section-scope,
 .learning-section .section-task {
-  margin-top: 10px;
+  margin-top: 8px;
 }
 .section-scope {
   color: var(--muted);
@@ -1034,8 +1045,6 @@ progress::-moz-progress-bar {
 }
 .learning-section.is-complete[data-collapsed="true"] h4 {
   color: var(--completed-text);
-  font-size: 18px;
-  font-weight: 500;
 }
 .learning-section.is-complete[data-collapsed="true"] .section-number {
   color: var(--completed-text);
@@ -1083,10 +1092,7 @@ progress::-moz-progress-bar {
     padding: 8px 10px;
   }
   .section-body {
-    margin-left: 0;
-  }
-  .section-heading h4 {
-    font-size: 19px;
+    grid-column: 1 / -1;
   }
 }
 @media (max-width: 1100px) {

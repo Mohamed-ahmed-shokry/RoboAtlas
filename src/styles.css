@@ -924,12 +924,13 @@ progress::-moz-progress-bar {
   grid-template-columns: 28px 2rem minmax(0, 1fr) auto;
   column-gap: 10px;
   border-top: 1px solid var(--border);
+  border-inline: 1px solid transparent;
   padding: 20px 16px;
   scroll-margin-top: 80px;
 }
 .learning-section[data-current="true"] {
   background: var(--current-bg);
-  border-bottom: 1px solid var(--border);
+  border: 1px solid var(--border);
   border-radius: 6px;
 }
 .learning-section[data-current="true"] + .learning-section {

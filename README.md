@@ -2,13 +2,23 @@
 
 RoboAtlas is a personal robotics learning dashboard built with React, TypeScript, and Vite. The roadmap is organized into stages, core learning sections, and linked resources. Includes section completion, Continue learning, search and filters, dark/light themes, optional resources, and progress backup/import.
 
+## Using the roadmap
+
+The current section is always the first unfinished core section in roadmap order. Continue learning clears filters, expands its stage, and focuses that section. Opening a later resource does not change the current section or mark anything complete.
+
+The current section stays open within an expanded stage and uses a subtle background with a rounded border. Other sections start collapsed. Click their number, title, or arrow to show or hide details; keyboard users can press Enter or Space. Completion checkboxes are separate controls.
+
+Checking the current section advances to the next unfinished section. Unchecking an earlier section makes it current again. Completing a stage's final section collapses that stage; its header reopens it for review.
+
+Search and filters change which sections are displayed without changing progress totals or the current-section selection. Optional resources are excluded from completion totals and Continue learning.
+
 ## Run locally
 
 Requires Node.js 24.x and npm. This matches the declared build runtime and the Vercel deployment runtime. From this repository, run `npm ci`, then `npm run dev`. Open <http://127.0.0.1:5173/>. Keep the terminal running. The fixed port avoids silently changing the browser storage origin.
 
 ## Build and verify
 
-`npm test` runs curriculum and progress/backup tests. `npm run typecheck` checks TypeScript. `npm run lint` checks code. `npm run build` creates `dist/`; `npm run preview` serves that build at <http://127.0.0.1:4173/>. Upload `dist/` to an ordinary static host; no backend or account is required.
+`npm test` runs curriculum, section-interface, progress, migration, and backup tests. `npm run typecheck` checks TypeScript. `npm run lint` checks code. `npm run build` creates `dist/`; `npm run preview` serves that build at <http://127.0.0.1:4173/>. Upload `dist/` to an ordinary static host; no backend or account is required.
 
 Run `npm ci` followed by `npm run check` for release verification. The check command runs the tests, ESLint, TypeScript checking, and the production build, stopping on the first failure. `npm run preview` serves the compiled `dist` files at <http://127.0.0.1:4173/> for a production smoke test; it is not the production hosting service.
 

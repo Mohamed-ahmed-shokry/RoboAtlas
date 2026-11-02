@@ -19,6 +19,8 @@ Use Node.js 24.x and npm.
 
 Match two-space indentation, double quotes, semicolons, and strict TypeScript. Use PascalCase component filenames, camelCase functions, and explicit kebab-case curriculum IDs. ESLint is configured; no formatter script exists. Keep resources visually prominent, surrounding controls compact, and dependencies and abstractions minimal.
 
+Keep the current section and Continue learning tied to the first unfinished core section in roadmap order. Keep section disclosure buttons separate from completion checkboxes and preserve keyboard operation. Maintain shared alignment between section titles and resource bodies, with surrounding controls visually secondary.
+
 Maintain a neat project structure in every change. Group files by responsibility, use clear names, reuse existing modules, and remove superseded code when compatibility does not require it. Keep legacy code clearly identified and tested. Add folders or split files only when doing so makes the project easier to navigate. Keep structural cleanup in small, logical commits.
 
 ## Testing Guidelines

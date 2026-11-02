@@ -33,6 +33,8 @@ Stage only relevant files or hunks. Before every commit, review `git diff --cach
 
 ## Working Safely
 
+Explain repository work with concrete technical detail. Before implementing, describe the intended changes, the relevant files or components, the technical terms involved, and why the approach fits the request. After implementing, explain the actual changes, important CSS properties or code behavior, verification results, and limitations. Define unfamiliar terms briefly and use enough detail to make the work understandable. Keep the implementation simple and continue making small, complete logical commits.
+
 Before nontrivial work, explain the approach, tradeoffs, and verification. Brainstorming stays discussion until implementation is approved. Challenge unsupported assumptions with concrete reasons; stay within agreed scope.
 
 Protect saved progress, backups, stable IDs, supplied URLs, and unrelated user changes. Preserve version-1 backups and version-2 progress compatibility, including unmatched legacy data and notes. Obtain approval before destructive data changes or directory/storage reorganization; explain impacts and keep recovery possible. Show proposed documentation/instruction wording and obtain approval before editing. After implementation, summarize changed files, verification, and limitations.

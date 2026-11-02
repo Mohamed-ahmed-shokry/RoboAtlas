@@ -180,13 +180,14 @@ describe("section completion and resume", () => {
     expect(toggleSections(unchecked, ["section-task"]).expanded).toEqual([]);
   });
 
-  it("prefers a recent unfinished core section and falls back when complete", () => {
+  it("selects the earliest unfinished core section regardless of recently opened content", () => {
     const state = { ...defaultProgress(), lastOpened: "section-control" };
-    expect(continueLearning(state)?.section.id).toBe("section-control");
+    expect(continueLearning(state)?.section.id).toBe("section-video");
     expect(state.completed).toEqual([]);
+    expect(state.lastOpened).toBe("section-control");
     expect(
-      continueLearning(toggleSections(state, ["section-control"]))?.section.id,
-    ).toBe("section-video");
+      continueLearning(toggleSections(state, ["section-video"]))?.section.id,
+    ).toBe("section-bundle");
     expect(
       continueLearning({ ...state, lastOpened: "optional-hoop" })?.section.id,
     ).toBe("section-video");
@@ -196,6 +197,32 @@ describe("section completion and resume", () => {
         completed: coreSections.map(({ section }) => section.id),
       }),
     ).toBeNull();
+  });
+
+  it("advances across stages and returns to an earlier section when it is unchecked", () => {
+    const state = { ...defaultProgress(), lastOpened: "section-control" };
+    const firstStageDone = toggleSections(state, [
+      "section-video",
+      "section-bundle",
+      "section-task",
+    ]);
+    expect(continueLearning(firstStageDone)).toMatchObject({
+      stage: { id: "new-control" },
+      section: { id: "section-control" },
+    });
+
+    const unchecked = toggleSections(firstStageDone, ["section-bundle"]);
+    expect(continueLearning(unchecked)).toMatchObject({
+      stage: { id: "new-systems" },
+      section: { id: "section-bundle" },
+    });
+    expect(unchecked.lastOpened).toBe("section-control");
+
+    const firstStageRestored = toggleSections(unchecked, ["section-bundle"]);
+    expect(continueLearning(firstStageRestored)?.section.id).toBe("section-control");
+    const allDone = toggleSections(firstStageRestored, ["section-control"]);
+    expect(continueLearning(allDone)).toBeNull();
+    expect(allDone.lastOpened).toBe("section-control");
   });
 
   it("returns whole-section search matches including scope, task, creators and resource metadata", () => {

@@ -306,13 +306,7 @@ export function resetProgress(state: ProgressState): ProgressState {
 
 export function continueLearning(state: ProgressState) {
   const done = new Set(state.completed);
-  return (
-    coreSections.find(
-      ({ section }) => section.id === state.lastOpened && !done.has(section.id),
-    ) ??
-    coreSections.find(({ section }) => !done.has(section.id)) ??
-    null
-  );
+  return coreSections.find(({ section }) => !done.has(section.id)) ?? null;
 }
 
 export function matchesSection(

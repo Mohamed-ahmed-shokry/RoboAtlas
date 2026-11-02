@@ -237,14 +237,15 @@ describe("core-only resume, filtering, and counts with real content", () => {
     expect(continueLearning(firstUnfinished)?.section.id).toBe(allCoreIds[0]);
   });
 
-  it("resumes an actual recently opened section without completing it or applying filters", () => {
+  it("selects the earliest unfinished section without applying recent history or filters", () => {
     const fresh = defaultProgress();
     expect(continueLearning(fresh)?.section.id).toBe(
       "robot-examples-definitions",
     );
     const recent = { ...fresh, lastOpened: "nav2-launch-example" };
-    expect(continueLearning(recent)?.section.id).toBe("nav2-launch-example");
+    expect(continueLearning(recent)?.section.id).toBe("robot-examples-definitions");
     expect(recent.completed).toEqual([]);
+    expect(recent.lastOpened).toBe("nav2-launch-example");
 
     const matching = coreSections.filter(({ section }) =>
       matchesSection(
@@ -255,21 +256,42 @@ describe("core-only resume, filtering, and counts with real content", () => {
     );
     expect(matching.length).toBeGreaterThan(0);
     expect(
-      matching.some(({ section }) => section.id === recent.lastOpened),
+      matching.some(({ section }) => section.id === "robot-examples-definitions"),
     ).toBe(false);
-    expect(continueLearning(recent)?.section.id).toBe("nav2-launch-example");
+    expect(continueLearning(recent)?.section.id).toBe("robot-examples-definitions");
     expect(countProgress(allCoreIds, recent.completed).total).toBe(
       coreSections.length,
     );
     expect(
       continueLearning(toggleSections(recent, [recent.lastOpened]))?.section.id,
     ).toBe("robot-examples-definitions");
+    const restored = importBackup(exportBackup(recent));
+    expect(restored.lastOpened).toBe("nav2-launch-example");
+    expect(continueLearning(restored)?.section.id).toBe("robot-examples-definitions");
   });
 
-  it("maps legacy resume and expanded preferences only to current core content", () => {
+  it("keeps roadmap order across saved stage transitions and an earlier unchecked section", () => {
+    const state = {
+      ...defaultProgress(),
+      completed: roadmap[0].sections.map((section) => section.id),
+      lastOpened: "nav2-launch-example",
+    };
+    const storage = memoryStorage({});
+    expect(saveProgress(storage, state)).toBeNull();
+    const reloaded = loadProgress(storage).state;
+    expect(continueLearning(reloaded)?.section.id).toBe("motor-control-chain");
+
+    const unchecked = toggleSections(reloaded, ["robot-anatomy-uncertainty"]);
+    expect(saveProgress(storage, unchecked)).toBeNull();
+    const afterUncheck = loadProgress(storage).state;
+    expect(continueLearning(afterUncheck)?.section.id).toBe("robot-anatomy-uncertainty");
+    expect(afterUncheck.lastOpened).toBe("nav2-launch-example");
+  });
+
+  it("preserves mapped legacy opened history while selecting the earliest unfinished section", () => {
     const migrated = migrateLegacyProgress(legacyProgress());
     const next = continueLearning(migrated);
-    expect(next?.section.id).toBe("path-planning-concepts");
+    expect(next?.section.id).toBe("robot-examples-definitions");
     expect(migrated.lastOpened).toBe("path-planning-concepts");
     expect(migrated.expanded).toContain(next!.stage.id);
     const currentStageIds = new Set(roadmap.map((stage) => stage.id));

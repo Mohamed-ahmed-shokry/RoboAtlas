@@ -54,6 +54,7 @@ describe("section-based interface", () => {
     expect(html).not.toContain("Enough depth");
     expect(html).toContain('aria-current="step"');
     expect(html).not.toContain('hidden=""');
+    expect(html).not.toContain('class="section-details-toggle"');
   });
 
   it.each([false, true])(
@@ -78,6 +79,12 @@ describe("section-based interface", () => {
       );
       expect(html).not.toContain('aria-current="step"');
       expect(html.match(/type="checkbox"/g)).toHaveLength(1);
+      const heading = html.match(/<h4\b[^>]*>([\s\S]*?)<\/h4>/)?.[1];
+      expect(heading).toMatch(/^<button\b/);
+      expect(heading).toContain('class="section-number">1.2</span>');
+      expect(heading).toContain(section.title);
+      expect(heading).not.toContain('type="checkbox"');
+      expect(html.match(/<button\b/g)).toHaveLength(1);
     },
   );
 

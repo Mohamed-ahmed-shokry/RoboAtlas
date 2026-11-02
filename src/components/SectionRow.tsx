@@ -76,28 +76,33 @@ export function SectionRow({
           />
         </label>
         <h4 id={"section-heading-" + section.id}>
-          <span className="section-number">{number}</span>{" "}
-          <span className="section-title">{section.title}</span>
+          {isCurrent ? (
+            <>
+              <span className="section-number">{number}</span>{" "}
+              <span className="section-title">{section.title}</span>
+            </>
+          ) : (
+            <button
+              type="button"
+              className="section-details-toggle"
+              aria-label={
+                (expanded ? "Collapse" : "Expand") +
+                " section " +
+                number +
+                ": " +
+                section.title
+              }
+              aria-expanded={expanded}
+              aria-controls={bodyId}
+              title={expanded ? "Hide details" : "Show details"}
+              onClick={() => setDetailsOpen((previous) => !previous)}
+            >
+              <span className="section-number">{number}</span>{" "}
+              <span className="section-title">{section.title}</span>
+              <ChevronRight size={16} aria-hidden="true" />
+            </button>
+          )}
         </h4>
-        {!isCurrent && (
-          <button
-            type="button"
-            className="icon-button section-details-toggle"
-            aria-label={
-              (expanded ? "Collapse" : "Expand") +
-              " section " +
-              number +
-              ": " +
-              section.title
-            }
-            aria-expanded={expanded}
-            aria-controls={bodyId}
-            title={expanded ? "Hide details" : "Show details"}
-            onClick={() => setDetailsOpen((previous) => !previous)}
-          >
-            <ChevronRight size={16} aria-hidden="true" />
-          </button>
-        )}
       </div>
       <div className="section-body" id={bodyId} hidden={!expanded}>
         {section.resources.map((resource) => (

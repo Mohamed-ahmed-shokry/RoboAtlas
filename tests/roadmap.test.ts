@@ -15,7 +15,7 @@ const find = (id: string) => sections.find((section) => section.id === id)!;
 describe("the updated exploration curriculum", () => {
   it("covers all thirteen topic groups in prerequisite order with bounded stages", () => {
     expect(roadmap).toHaveLength(27);
-    expect(sections).toHaveLength(128);
+    expect(sections).toHaveLength(133);
     expect([...new Set(roadmap.map((stage) => stage.topicGroupId))]).toEqual([
       ...topicGroupIds,
     ]);
@@ -218,20 +218,43 @@ describe("the updated exploration curriculum", () => {
     expect(sourceVerification.act).toContain("no creator chapters");
   });
 
-  it("retains unmatched old resources without duplicating their assigned core portions", () => {
+  it("places added technical coverage beside its prerequisites with its original source", () => {
+    const placements = [
+      ["point-cloud-processing", "camera-geometry-registration", "robots-see"],
+      ["gps-imu-pose-fusion", "state-estimation-fusion", "sensor-fusion"],
+      ["gemini-vla-example", "vla-predictive-models", "gemini-robotics"],
+      ["world-model-concepts", "vla-predictive-models", "world-models"],
+      [
+        "physical-ai-development-cycle",
+        "physical-ai-directions",
+        "physical-ai-intro",
+      ],
+    ];
+    const oldResources = legacyCurriculum.flatMap((stage) => stage.resources);
+    for (const [sectionId, stageId, resourceId] of placements) {
+      const assigned = coreSections.find(
+        ({ section }) => section.id === sectionId,
+      )!;
+      expect(assigned.stage.id).toBe(stageId);
+      expect(assigned.section.resources[0].id).toBe(resourceId);
+      expect(assigned.section.resources[0].url).toBe(
+        oldResources.find((resource) => resource.id === resourceId)!.url,
+      );
+    }
+    expect(find("point-cloud-processing").scope).toContain(
+      "complete Basics of Point-Cloud Processing",
+    );
+    expect(find("gps-imu-pose-fusion").scope).toContain("complete Part 3");
+    expect(find("gemini-vla-example").scope).toContain("overview video");
+  });
+
+  it("keeps remaining optional resources separate while technical coverage moves into the roadmap", () => {
     const oldResources = legacyCurriculum.flatMap((stage) => stage.resources);
     expect(optionalResources.length).toBeGreaterThan(0);
     expect(new Set(optionalResources.map((resource) => resource.id)).size).toBe(
       optionalResources.length,
     );
-    expect(
-      optionalResources.find(
-        (resource) => resource.id === "optional-fusion-pose",
-      )?.scope,
-    ).toBe("Part 3: Fusing a GPS and IMU to Estimate Pose.");
-    for (const resource of optionalResources.filter(
-      (resource) => resource.id !== "optional-fusion-pose",
-    )) {
+    for (const resource of optionalResources) {
       expect(oldResources.some((old) => old.id === resource.id)).toBe(true);
       expect(
         sections.some((section) =>

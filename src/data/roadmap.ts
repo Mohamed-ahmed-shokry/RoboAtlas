@@ -500,6 +500,31 @@ const sources = {
     "Seeed Studio",
     "https://www.seeedstudio.com/blog/2026/08/19/learning-physical-ai-a-sim-to-real-vla-pipeline-with-seeed-rebot-arm-and-nvidia-isaac/",
   ),
+  pointCloudBasics: resource(
+    "robots-see",
+    "Making Vehicles and Robots See",
+    "MathWorks",
+    "https://www.mathworks.com/videos/series/making-vehicles-and-robots-see-getting-started-with-perception-for-students.html",
+  ),
+  physicalAiConcepts: resource(
+    "physical-ai-intro",
+    "What Is Physical AI?",
+    "NVIDIA",
+    "https://www.nvidia.com/en-us/glossary/generative-physical-ai/",
+  ),
+  geminiRobotics: resource(
+    "gemini-robotics",
+    "Gemini Robotics",
+    "Google DeepMind",
+    "https://deepmind.google/blog/gemini-robotics-brings-ai-into-the-physical-world/",
+    "Application",
+  ),
+  worldModelConcepts: resource(
+    "world-models",
+    "What Is a World Model?",
+    "NVIDIA",
+    "https://www.nvidia.com/en-us/glossary/world-models/",
+  ),
 };
 
 // Internal planning only: conservative study budgets include pauses and reading, not just runtime.
@@ -1033,6 +1058,14 @@ export const roadmap: RoadmapStage[] = [
         "Watch Absolute Orientation Problem.",
       ),
       learn(
+        "point-cloud-processing",
+        "Point-cloud processing fundamentals",
+        [sources.pointCloudBasics],
+        "Watch the complete Basics of Point-Cloud Processing video (08:15) from this series.",
+        ["point-cloud-basics"],
+        25,
+      ),
+      learn(
         "point-set-alignment",
         "Iterative closest point",
         [sources.cyrill],
@@ -1127,6 +1160,14 @@ export const roadmap: RoadmapStage[] = [
         "Nonlinear state estimation",
         [sources.kalman],
         "Watch Part 5: Nonlinear State Estimators.",
+      ),
+      learn(
+        "gps-imu-pose-fusion",
+        "Combining GPS and IMU for pose",
+        [sources.fusion],
+        "Watch the complete Part 3: Fusing a GPS and IMU to Estimate Pose (13:59).",
+        ["fusion-pose"],
+        35,
       ),
     ],
   },
@@ -1600,11 +1641,27 @@ export const roadmap: RoadmapStage[] = [
         "Read the architecture and workflow explanation: image/state/language inputs, action prediction, and execution. Do not undertake full fine-tuning.",
       ),
       learn(
+        "gemini-vla-example",
+        "A vision-language-action system in practice",
+        [sources.geminiRobotics],
+        "Read from the introduction to just before “Gemini Robotics: Our most advanced vision-language-action model”, including the complete “Gemini Robotics: Bringing AI to the physical world” overview video.",
+        ["gemini-intro-demo"],
+        30,
+      ),
+      learn(
         "model-based-learning",
         "Model-based reinforcement learning",
         [sources.modelBased],
         "",
         ["model-based-rl"],
+      ),
+      learn(
+        "world-model-concepts",
+        "How world models predict outcomes",
+        [sources.worldModelConcepts],
+        "Read the article from the introduction through the FAQs; finish before Next Steps.",
+        ["world-model-introduction"],
+        35,
       ),
       learn(
         "world-foundation-models-section",
@@ -1620,6 +1677,14 @@ export const roadmap: RoadmapStage[] = [
     shortTitle: "Physical AI workflow",
     topicGroupId: "physical-ai",
     sections: [
+      learn(
+        "physical-ai-development-cycle",
+        "Training, simulation, and deployment",
+        [sources.physicalAiConcepts],
+        "Read from the introduction through How Does Physical AI Work?, including the three-computer framework. Finish before Applications and Use Cases of Physical AI.",
+        ["physical-ai-development"],
+        25,
+      ),
       learn(
         "physical-ai-introduction",
         "Physical AI workflow introduction",
@@ -1659,15 +1724,11 @@ const optionalLegacyResourceIds = new Set([
   "robot-dog-build",
   "opendog-walk",
   "balancing-bike",
-  "robots-see",
   "meet-ethan",
   "mars-helicopter",
   "stretch-dhl",
   "agri-robotics",
   "atlas-learning",
-  "physical-ai-intro",
-  "gemini-robotics",
-  "world-models",
   "jim-fan-challenge",
   "meet-tom",
   "better-robots",
@@ -1685,9 +1746,4 @@ export const optionalResources: LearningResource[] = [
       label: item.label,
       scope: item.selection,
     })),
-  {
-    ...sources.fusion,
-    id: "optional-fusion-pose",
-    scope: "Part 3: Fusing a GPS and IMU to Estimate Pose.",
-  },
 ];

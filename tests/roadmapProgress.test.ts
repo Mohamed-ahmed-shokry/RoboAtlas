@@ -5,6 +5,7 @@ import {
   unitIds as legacyUnitIds,
 } from "../src/legacy/curriculum";
 import { coreSections, optionalResources, roadmap } from "../src/data/roadmap";
+import type { LegacyProgressState } from "../src/lib/progress";
 import {
   continueLearning,
   countProgress,
@@ -22,7 +23,7 @@ import {
   validateProgress,
 } from "../src/lib/progress";
 
-function legacyProgress(completed: string[] = []) {
+function legacyProgress(completed: string[] = []): LegacyProgressState {
   return {
     version: 1,
     completed,
@@ -49,9 +50,50 @@ function memoryStorage(initial: Record<string, string>) {
 }
 
 const allLegacyIds = legacyLearningUnits.map(({ unit }) => unit.id);
+const addedSectionIds = [
+  "point-cloud-processing",
+  "gps-imu-pose-fusion",
+  "gemini-vla-example",
+  "world-model-concepts",
+  "physical-ai-development-cycle",
+];
 const allCoreIds = coreSections.map(({ section }) => section.id);
 
 describe("migration against the actual updated roadmap", () => {
+  it("keeps added sections unfinished in existing v2 progress despite retained legacy completions", () => {
+    const state = {
+      ...defaultProgress(),
+      completed: allCoreIds.filter((id) => !addedSectionIds.includes(id)),
+      legacy: legacyProgress(allLegacyIds),
+    };
+    const storage = memoryStorage({ [STORAGE_KEY]: JSON.stringify(state) });
+    const loaded = loadProgress(storage);
+    expect(loaded.canSave).toBe(true);
+    expect(loaded.migrated).toBe(false);
+    expect(loaded.state).toEqual(state);
+    expect(continueLearning(loaded.state)?.section.id).toBe(
+      "point-cloud-processing",
+    );
+    expect(importBackup(exportBackup(state)).completed).toEqual(state.completed);
+  });
+
+  it("maps added sections only from their exact v1 learning units", () => {
+    const units = [
+      "point-cloud-basics",
+      "fusion-pose",
+      "gemini-intro-demo",
+      "world-model-introduction",
+      "physical-ai-development",
+    ];
+    for (const [index, unit] of units.entries()) {
+      const mapped = migrateLegacyProgress(legacyProgress([unit]));
+      expect(mapped.completed).toEqual([addedSectionIds[index]]);
+    }
+    expect(
+      migrateLegacyProgress(legacyProgress(["fusion-orientation"])).completed,
+    ).not.toContain("gps-imu-pose-fusion");
+  });
+
   it("uses valid, explicit legacy coverage IDs and never assigns them to new practical work", () => {
     const mapped = coreSections.filter(
       ({ section }) => section.legacyUnitIds?.length,

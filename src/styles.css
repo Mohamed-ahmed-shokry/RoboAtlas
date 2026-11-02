@@ -1098,6 +1098,24 @@ progress::-moz-progress-bar {
 .optional-resource-list .section-resource-title {
   font-size: 14px;
 }
+.profile-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 8px 0 24px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.profile-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.profile-links a:hover {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
 @media (min-width: 761px) {
   .sidebar[data-collapsed="true"] {
     display: none;

@@ -379,6 +379,24 @@ export default function App() {
               ))}
             </div>
           </details>
+          <footer className="profile-links" aria-label="Author profiles">
+            <a
+              href="https://github.com/Mohamed-ahmed-shokry"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Mohamed Shokry on GitHub (opens in a new tab)"
+            >
+              GitHub
+            </a>
+            <a
+              href="https://www.linkedin.com/in/mohamed-shokry-8a2a0a1ab/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Mohamed Shokry on LinkedIn (opens in a new tab)"
+            >
+              LinkedIn
+            </a>
+          </footer>
           <div className="sr-only" aria-live="polite">
             {notice}
           </div>

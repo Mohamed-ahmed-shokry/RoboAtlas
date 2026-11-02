@@ -25,7 +25,7 @@ Maintain a neat project structure in every change. Group files by responsibility
 
 ## Testing Guidelines
 
-Use Vitest in `tests/*.test.ts`. Cover behavior: all 13 topic groups, verified stage and section totals, exact resource selections, optional-resource exclusion, completion, resume logic, malformed storage, legacy migration, and backup compatibility. No coverage threshold is configured. Check UI changes on desktop and narrow mobile screens, including keyboard navigation. Reuse verification when relevant code is unchanged.
+Use Vitest in `tests/*.test.ts`. Cover behavior: all 13 topic groups, verified stage and section totals, exact resource selections, resource placement and conservative completion mapping for added sections, completion, resume logic, malformed storage, legacy migration, and backup compatibility. No coverage threshold is configured. Check UI changes on desktop and narrow mobile screens, including keyboard navigation. Reuse verification when relevant code is unchanged.
 
 ## Commits and Pull Requests
 

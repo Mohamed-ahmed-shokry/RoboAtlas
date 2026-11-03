@@ -12,6 +12,12 @@ Checking the current section advances to the next unfinished section. Unchecking
 
 Search and filters change which sections are displayed without changing progress totals or the current-section selection. All retained learning resources are assigned within the main roadmap; there is no separate optional collection.
 
+For sections with an explicit YouTube viewing range, the video link opens at the assigned start time. The displayed finish time remains a study cue; playback does not stop automatically. Other resource links retain their original destinations.
+
+Text searches temporarily expand matching stages and sections to show resource links, including completed matches. Clearing the search restores the usual disclosure behavior. Search does not change completion or the current section.
+
+The sidebar’s expanded/collapsed preference is saved in this browser under roboatlas.sidebar-collapsed.v1, separately from learning progress. It is not included in progress backups. If browser storage is unavailable, the sidebar still works for the current visit.
+
 ## Run locally
 
 Requires Node.js 24.x and npm. This matches the declared build runtime and the Vercel deployment runtime. From this repository, run `npm ci`, then `npm run dev`. Open <http://127.0.0.1:5173/>. Keep the terminal running. The fixed port avoids silently changing the browser storage origin.

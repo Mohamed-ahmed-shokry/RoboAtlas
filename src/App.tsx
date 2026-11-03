@@ -21,6 +21,7 @@ import {
 } from "./lib/progress";
 import type { CompletionFilter, Filters } from "./lib/progress";
 import { useProgress } from "./lib/useProgress";
+import { loadSidebarCollapsed, saveSidebarCollapsed } from "./lib/sidebarPreference";
 import { Sidebar } from "./components/Sidebar";
 import { RoadmapStage } from "./components/RoadmapStage";
 import { BackupDialog } from "./components/BackupDialog";
@@ -42,7 +43,7 @@ export default function App() {
   );
   const [notice, setNotice] = useState("");
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(loadSidebarCollapsed);
   const overall = countProgress(sectionIds, progress.completed);
   const next = continueLearning(progress);
   const filtering =
@@ -102,7 +103,11 @@ export default function App() {
             title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
             aria-expanded={!sidebarCollapsed}
             aria-controls="roadmap-sidebar"
-            onClick={() => setSidebarCollapsed((collapsed) => !collapsed)}
+            onClick={() => {
+              const collapsed = !sidebarCollapsed;
+              setSidebarCollapsed(collapsed);
+              saveSidebarCollapsed(collapsed);
+            }}
           >
             {sidebarCollapsed ? (
               <PanelLeftOpen size={18} aria-hidden="true" />

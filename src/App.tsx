@@ -46,8 +46,9 @@ export default function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(loadSidebarCollapsed);
   const overall = countProgress(sectionIds, progress.completed);
   const next = continueLearning(progress);
+  const searching = filters.query.trim() !== "";
   const filtering =
-    filters.query.trim() !== "" ||
+    searching ||
     filters.completion !== "all" ||
     filters.label !== "all";
   const visible = coreSections.filter(({ section }) =>
@@ -305,6 +306,7 @@ export default function App() {
               );
               const expanded =
                 progress.expanded.includes(stage.id) ||
+                searching ||
                 (filtering && !stageComplete);
               return (
                 sections.length > 0 && (
@@ -314,6 +316,7 @@ export default function App() {
                     number={index + 1}
                     sections={sections}
                     expanded={expanded}
+                    searching={searching}
                     completed={progress.completed}
                     currentSectionId={next?.section.id ?? null}
                     onExpand={() => {

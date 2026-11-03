@@ -75,6 +75,56 @@ describe("section-based interface", () => {
   });
 
   it.each([false, true])(
+    "reveals matching resource bodies during text search, completed=%s",
+    (completed) => {
+      const html = renderToStaticMarkup(createElement(SectionRow, {
+        section,
+        number: "1.2",
+        completed,
+        current: false,
+        searching: true,
+        onToggle: () => {},
+        onOpen: () => {},
+      }));
+      expect(html).toContain('data-collapsed="false"');
+      expect(html).not.toContain('hidden=""');
+      expect(html).not.toContain('aria-current="step"');
+      expect(html).not.toContain('class="section-details-toggle"');
+      expect(html.match(/type="checkbox"/g)).toHaveLength(1);
+      expect(html.match(/target="_blank"/g)).toHaveLength(2);
+      expect(html).toContain(section.scope);
+    },
+  );
+
+  it("passes text-search expansion to completed sections while keeping full stage totals", () => {
+    const first = { ...section, id: "earlier-section" };
+    const stage: Stage = {
+      id: "completed-stage",
+      title: "Completed stage",
+      shortTitle: "Completed",
+      topicGroupId: "example",
+      sections: [first, section],
+    };
+    const html = renderToStaticMarkup(createElement(RoadmapStage, {
+      stage,
+      number: 3,
+      sections: [section],
+      expanded: true,
+      searching: true,
+      completed: [first.id, section.id],
+      currentSectionId: null,
+      onExpand: () => {},
+      onToggle: () => {},
+      onOpen: () => {},
+    }));
+    expect(html).toContain("2 of 2 sections complete");
+    expect(html).toContain('class="section-number">3.2</span>');
+    expect(html).toContain('data-collapsed="false"');
+    expect(html).not.toContain('hidden=""');
+    expect(html.match(/type="checkbox"/g)).toHaveLength(1);
+  });
+
+  it.each([false, true])(
     "starts a non-current section collapsed, completed=%s, with a separate details control",
     (completed) => {
       const html = renderToStaticMarkup(

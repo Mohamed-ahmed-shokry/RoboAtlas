@@ -29,6 +29,8 @@ Use Vitest in `tests/*.test.ts`. Cover behavior: all 13 topic groups, verified s
 
 ## Commits and Pull Requests
 
+Keep `main` stable and ready for deployment. Before implementing each new feature, create and switch to an `ms/<feature-name>` branch from `main`. Keep related changes on that branch. Merge completed features into `main` only after `npm run check` passes and the user explicitly authorizes the merge. Build deployments from `main`.
+
 Commit each completed, verified logical change separately, following our agreed workflow. Group by purpose and dependencies; keep related implementation and tests together. Avoid unrelated refactoring and artificially tiny commits that leave the app broken.
 
 Stage only relevant files or hunks. Before every commit, review `git diff --cached` and run `git diff --cached --check`. Use specific Conventional Commit messages, e.g. `feat: make lesson titles clickable`. Report each hash, its purpose, and checks passed or not run. PRs should explain changes, verification, and limitations; link related issues when applicable and include screenshots for UI changes. Do not push, publish, or rewrite history without explicit authorization.

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ArrowUpRight, ChevronRight } from "lucide-react";
 import type { LearningResource, LearningSection } from "../data/roadmap";
+import { resourceHref } from "../lib/resourceLinks";
 
 export function ResourceLink({
   resource,
@@ -13,7 +14,7 @@ export function ResourceLink({
     <div className="section-resource">
       <a
         className="section-resource-link"
-        href={resource.url}
+        href={resourceHref(resource)}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={"Open " + resource.title + " in a new tab"}
@@ -38,6 +39,7 @@ export function SectionRow({
   number,
   completed,
   current,
+  searching = false,
   onToggle,
   onOpen,
 }: {
@@ -45,12 +47,13 @@ export function SectionRow({
   number: string;
   completed: boolean;
   current: boolean;
+  searching?: boolean;
   onToggle: () => void;
   onOpen: () => void;
 }) {
   const [detailsOpen, setDetailsOpen] = useState(false);
   const isCurrent = current && !completed;
-  const expanded = isCurrent || detailsOpen;
+  const expanded = isCurrent || searching || detailsOpen;
   const bodyId = "section-body-" + section.id;
 
   return (
@@ -76,7 +79,7 @@ export function SectionRow({
           />
         </label>
         <h4 id={"section-heading-" + section.id}>
-          {isCurrent ? (
+          {isCurrent || searching ? (
             <>
               <span className="section-number">{number}</span>{" "}
               <span className="section-title">{section.title}</span>

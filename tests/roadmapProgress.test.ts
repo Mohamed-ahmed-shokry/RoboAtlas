@@ -4,7 +4,8 @@ import {
   learningUnits as legacyLearningUnits,
   unitIds as legacyUnitIds,
 } from "../src/legacy/curriculum";
-import { coreSections, optionalResources, roadmap } from "../src/data/roadmap";
+import { coreSections, roadmap } from "../src/data/roadmap";
+import type { LegacyProgressState } from "../src/lib/progress";
 import {
   continueLearning,
   countProgress,
@@ -22,7 +23,7 @@ import {
   validateProgress,
 } from "../src/lib/progress";
 
-function legacyProgress(completed: string[] = []) {
+function legacyProgress(completed: string[] = []): LegacyProgressState {
   return {
     version: 1,
     completed,
@@ -49,9 +50,62 @@ function memoryStorage(initial: Record<string, string>) {
 }
 
 const allLegacyIds = legacyLearningUnits.map(({ unit }) => unit.id);
+const addedSectionIds = [
+  "point-cloud-processing",
+  "gps-imu-pose-fusion",
+  "gemini-vla-example",
+  "world-model-concepts",
+  "physical-ai-development-cycle",
+  "opendog-hardware-design",
+  "balancing-bike-feedback",
+  "warehouse-manipulation-case-study",
+  "atlas-learned-behaviors",
+  "ingenuity-flight-case-study",
+  "opendog-gait-design",
+];
 const allCoreIds = coreSections.map(({ section }) => section.id);
 
 describe("migration against the actual updated roadmap", () => {
+  it("keeps added sections unfinished in existing v2 progress despite retained legacy completions", () => {
+    const state = {
+      ...defaultProgress(),
+      completed: allCoreIds.filter((id) => !addedSectionIds.includes(id)),
+      legacy: legacyProgress(allLegacyIds),
+    };
+    const storage = memoryStorage({ [STORAGE_KEY]: JSON.stringify(state) });
+    const loaded = loadProgress(storage);
+    expect(loaded.canSave).toBe(true);
+    expect(loaded.migrated).toBe(false);
+    expect(loaded.state).toEqual(state);
+    expect(continueLearning(loaded.state)?.section.id).toBe(
+      "opendog-hardware-design",
+    );
+    expect(importBackup(exportBackup(state)).completed).toEqual(state.completed);
+  });
+
+  it("maps added sections only from their exact v1 learning units", () => {
+    const units = [
+      "point-cloud-basics",
+      "fusion-pose",
+      "gemini-intro-demo",
+      "world-model-introduction",
+      "physical-ai-development",
+      "robot-dog-v3-one",
+      "omni-wheel-bike",
+      "stretch-warehouse",
+      "atlas-inside-lab",
+      "ingenuity-mars-mission",
+      "opendog-v3-walking",
+    ];
+    for (const [index, unit] of units.entries()) {
+      const mapped = migrateLegacyProgress(legacyProgress([unit]));
+      expect(mapped.completed).toEqual([addedSectionIds[index]]);
+    }
+    expect(
+      migrateLegacyProgress(legacyProgress(["fusion-orientation"])).completed,
+    ).not.toContain("gps-imu-pose-fusion");
+  });
+
   it("uses valid, explicit legacy coverage IDs and never assigns them to new practical work", () => {
     const mapped = coreSections.filter(
       ({ section }) => section.legacyUnitIds?.length,
@@ -182,6 +236,29 @@ describe("migration against the actual updated roadmap", () => {
 });
 
 describe("core-only resume, filtering, and counts with real content", () => {
+  it("includes promoted resources in ordinary search and completion filters", () => {
+    for (const id of addedSectionIds) {
+      const section = coreSections.find((item) => item.section.id === id)!.section;
+      const filters = {
+        query: section.resources[0].title,
+        label: section.resources[0].label,
+        completion: "unfinished" as const,
+      };
+      expect(matchesSection(section, filters, []), id).toBe(true);
+      const state = toggleSections(defaultProgress(), [id]);
+      expect(matchesSection(section, filters, state.completed), id).toBe(false);
+      expect(
+        matchesSection(section, { ...filters, completion: "completed" }, state.completed),
+        id,
+      ).toBe(true);
+      expect(countProgress(allCoreIds, state.completed)).toEqual({
+        count: 1,
+        total: 139,
+        percent: 1,
+      });
+    }
+  });
+
   it("collapses only after all stage sections finish even when the toggle comes from a filtered view", () => {
     const stage = roadmap.find((item) => item.id === "systems-foundations")!;
     const state = { ...defaultProgress(), expanded: [stage.id] };
@@ -217,16 +294,18 @@ describe("core-only resume, filtering, and counts with real content", () => {
     expect(continueLearning(finished)?.stage.id).not.toBe(stage.id);
   });
 
-  it("excludes optional resources from completion and from the all-complete calculation", () => {
-    expect(optionalResources.length).toBeGreaterThan(0);
-    const optionalIds = optionalResources.map((resource) => resource.id);
-    expect(optionalIds.some((id) => allCoreIds.includes(id))).toBe(false);
+  it("counts sections rather than their resource links for completion and resume", () => {
+    const resourceIds = [...new Set(
+      coreSections.flatMap(({ section }) =>
+        section.resources.map((resource) => resource.id),
+      ),
+    )].filter((id) => !allCoreIds.includes(id));
     const state = toggleSections(defaultProgress(), [
       ...allCoreIds,
-      ...optionalIds,
+      ...resourceIds,
     ]);
     expect(state.completed).toHaveLength(coreSections.length);
-    expect(state.completed.some((id) => optionalIds.includes(id))).toBe(false);
+    expect(state.completed.some((id) => resourceIds.includes(id))).toBe(false);
     expect(countProgress(allCoreIds, state.completed)).toEqual({
       count: coreSections.length,
       total: coreSections.length,

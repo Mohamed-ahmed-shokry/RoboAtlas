@@ -19,13 +19,17 @@ Use Node.js 24.x and npm.
 
 Match two-space indentation, double quotes, semicolons, and strict TypeScript. Use PascalCase component filenames, camelCase functions, and explicit kebab-case curriculum IDs. ESLint is configured; no formatter script exists. Keep resources visually prominent, surrounding controls compact, and dependencies and abstractions minimal.
 
+Keep the current section and Continue learning tied to the first unfinished core section in roadmap order. Keep section disclosure buttons separate from completion checkboxes and preserve keyboard operation. Maintain shared alignment between section titles and resource bodies, with surrounding controls visually secondary.
+
 Maintain a neat project structure in every change. Group files by responsibility, use clear names, reuse existing modules, and remove superseded code when compatibility does not require it. Keep legacy code clearly identified and tested. Add folders or split files only when doing so makes the project easier to navigate. Keep structural cleanup in small, logical commits.
 
 ## Testing Guidelines
 
-Use Vitest in `tests/*.test.ts`. Cover behavior: all 13 topic groups, verified stage and section totals, exact resource selections, optional-resource exclusion, completion, resume logic, malformed storage, legacy migration, and backup compatibility. No coverage threshold is configured. Check UI changes on desktop and narrow mobile screens, including keyboard navigation. Reuse verification when relevant code is unchanged.
+Use Vitest in `tests/*.test.ts`. Cover behavior: all 13 topic groups, verified stage and section totals, exact resource selections, resource placement and conservative completion mapping for added sections, completion, resume logic, malformed storage, legacy migration, and backup compatibility. No coverage threshold is configured. Check UI changes on desktop and narrow mobile screens, including keyboard navigation. Reuse verification when relevant code is unchanged.
 
 ## Commits and Pull Requests
+
+Keep `main` stable and ready for deployment. Before implementing each new feature, create and switch to an `ms/<feature-name>` branch from `main`. Keep related changes on that branch. Merge completed features into `main` only after `npm run check` passes and the user explicitly authorizes the merge. Build deployments from `main`.
 
 Commit each completed, verified logical change separately, following our agreed workflow. Group by purpose and dependencies; keep related implementation and tests together. Avoid unrelated refactoring and artificially tiny commits that leave the app broken.
 

@@ -1074,29 +1074,23 @@ progress::-moz-progress-bar {
 .learning-section.is-complete[data-collapsed="true"] .section-number {
   color: var(--completed-text);
 }
-.optional-resources {
-  margin: 24px 0;
-  border-top: 1px solid var(--border);
-  padding-top: 12px;
+.profile-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 8px 0 24px;
   color: var(--muted);
-}
-.optional-resources summary {
-  cursor: pointer;
   font-size: 12px;
-  padding: 8px 0;
 }
-.optional-resources summary span {
-  margin-left: 8px;
+.profile-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
-.optional-resource-list {
-  padding: 8px 0;
-}
-.optional-resource-list .section-resource {
-  border-bottom: 1px solid var(--border);
-  padding: 9px 0;
-}
-.optional-resource-list .section-resource-title {
-  font-size: 14px;
+.profile-links a:hover {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 @media (min-width: 761px) {
   .sidebar[data-collapsed="true"] {

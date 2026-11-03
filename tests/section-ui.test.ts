@@ -1,7 +1,7 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { SectionRow } from "../src/components/SectionRow";
+import { ResourceLink, SectionRow } from "../src/components/SectionRow";
 import { RoadmapStage } from "../src/components/RoadmapStage";
 import type {
   LearningSection,
@@ -32,6 +32,23 @@ const section: LearningSection = {
 };
 
 describe("section-based interface", () => {
+  it("renders the assigned video time without changing companion links", () => {
+    const html = renderToStaticMarkup(createElement(ResourceLink, {
+      resource: {
+        ...section.resources[0],
+        url: "https://www.youtube.com/watch?v=example",
+        startSeconds: 1136,
+      },
+    }));
+    expect(html).toContain('href="https://www.youtube.com/watch?v=example&amp;t=1136s"');
+    expect(html).toContain('target="_blank"');
+    const companion = renderToStaticMarkup(createElement(ResourceLink, {
+      resource: section.resources[1],
+    }));
+    expect(companion).toContain('href="https://example.com/reading"');
+    expect(companion).not.toContain("?t=");
+  });
+
   it("counts a multi-resource section once and keeps resource links separate", () => {
     const html = renderToStaticMarkup(
       createElement(SectionRow, {
@@ -55,6 +72,56 @@ describe("section-based interface", () => {
     expect(html).toContain('aria-current="step"');
     expect(html).not.toContain('hidden=""');
     expect(html).not.toContain('class="section-details-toggle"');
+  });
+
+  it.each([false, true])(
+    "reveals matching resource bodies during text search, completed=%s",
+    (completed) => {
+      const html = renderToStaticMarkup(createElement(SectionRow, {
+        section,
+        number: "1.2",
+        completed,
+        current: false,
+        searching: true,
+        onToggle: () => {},
+        onOpen: () => {},
+      }));
+      expect(html).toContain('data-collapsed="false"');
+      expect(html).not.toContain('hidden=""');
+      expect(html).not.toContain('aria-current="step"');
+      expect(html).not.toContain('class="section-details-toggle"');
+      expect(html.match(/type="checkbox"/g)).toHaveLength(1);
+      expect(html.match(/target="_blank"/g)).toHaveLength(2);
+      expect(html).toContain(section.scope);
+    },
+  );
+
+  it("passes text-search expansion to completed sections while keeping full stage totals", () => {
+    const first = { ...section, id: "earlier-section" };
+    const stage: Stage = {
+      id: "completed-stage",
+      title: "Completed stage",
+      shortTitle: "Completed",
+      topicGroupId: "example",
+      sections: [first, section],
+    };
+    const html = renderToStaticMarkup(createElement(RoadmapStage, {
+      stage,
+      number: 3,
+      sections: [section],
+      expanded: true,
+      searching: true,
+      completed: [first.id, section.id],
+      currentSectionId: null,
+      onExpand: () => {},
+      onToggle: () => {},
+      onOpen: () => {},
+    }));
+    expect(html).toContain("2 of 2 sections complete");
+    expect(html).toContain('class="section-number">3.2</span>');
+    expect(html).toContain('data-collapsed="false"');
+    expect(html).not.toContain('hidden=""');
+    expect(html.match(/type="checkbox"/g)).toHaveLength(1);
   });
 
   it.each([false, true])(

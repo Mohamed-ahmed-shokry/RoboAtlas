@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import { curriculum as legacyCurriculum } from "../src/legacy/curriculum";
 import {
   coreSections,
-  optionalResources,
   roadmap,
   sourceVerification,
   topicGroupIds,
@@ -15,7 +14,7 @@ const find = (id: string) => sections.find((section) => section.id === id)!;
 describe("the updated exploration curriculum", () => {
   it("covers all thirteen topic groups in prerequisite order with bounded stages", () => {
     expect(roadmap).toHaveLength(27);
-    expect(sections).toHaveLength(128);
+    expect(sections).toHaveLength(139);
     expect([...new Set(roadmap.map((stage) => stage.topicGroupId))]).toEqual([
       ...topicGroupIds,
     ]);
@@ -170,6 +169,13 @@ describe("the updated exploration curriculum", () => {
         ).toBeTruthy();
         const start = seconds(range![1]);
         const end = seconds(range![2]);
+        for (const resource of find(id).resources) {
+          if (resource.url.startsWith("https://www.youtube.com/watch?")) {
+            expect(resource.startSeconds, id + ": " + resource.id).toBe(start);
+          } else {
+            expect(resource.startSeconds).toBeUndefined();
+          }
+        }
         expect(
           start,
           `${id} must start where the previous section finished`,
@@ -218,26 +224,59 @@ describe("the updated exploration curriculum", () => {
     expect(sourceVerification.act).toContain("no creator chapters");
   });
 
-  it("retains unmatched old resources without duplicating their assigned core portions", () => {
+  it("places retained resources beside their prerequisites with their original source", () => {
+    const placements = [
+      ["point-cloud-processing", "camera-geometry-registration", "robots-see"],
+      ["gps-imu-pose-fusion", "state-estimation-fusion", "sensor-fusion"],
+      ["gemini-vla-example", "vla-predictive-models", "gemini-robotics"],
+      ["world-model-concepts", "vla-predictive-models", "world-models"],
+      [
+        "physical-ai-development-cycle",
+        "physical-ai-directions",
+        "physical-ai-intro",
+      ],
+      ["opendog-hardware-design", "hardware-build-diagnosis", "robot-dog-build"],
+      ["balancing-bike-feedback", "control-experiments-mpc", "balancing-bike"],
+      ["warehouse-manipulation-case-study", "manipulation-control", "stretch-dhl"],
+      ["atlas-learned-behaviors", "sim-to-real", "atlas-learning"],
+      ["ingenuity-flight-case-study", "drone-walking-foundations", "mars-helicopter"],
+      ["opendog-gait-design", "drone-walking-foundations", "opendog-walk"],
+    ];
     const oldResources = legacyCurriculum.flatMap((stage) => stage.resources);
-    expect(optionalResources.length).toBeGreaterThan(0);
-    expect(new Set(optionalResources.map((resource) => resource.id)).size).toBe(
-      optionalResources.length,
-    );
-    expect(
-      optionalResources.find(
-        (resource) => resource.id === "optional-fusion-pose",
-      )?.scope,
-    ).toBe("Part 3: Fusing a GPS and IMU to Estimate Pose.");
-    for (const resource of optionalResources.filter(
-      (resource) => resource.id !== "optional-fusion-pose",
-    )) {
-      expect(oldResources.some((old) => old.id === resource.id)).toBe(true);
-      expect(
-        sections.some((section) =>
-          section.resources.some((core) => core.id === resource.id),
-        ),
-      ).toBe(false);
+    for (const [sectionId, stageId, resourceId] of placements) {
+      const assigned = coreSections.find(
+        ({ section }) => section.id === sectionId,
+      )!;
+      expect(assigned.stage.id).toBe(stageId);
+      expect(assigned.section.resources[0].id).toBe(resourceId);
+      expect(assigned.section.resources[0].url).toBe(
+        oldResources.find((resource) => resource.id === resourceId)!.url,
+      );
     }
+    expect(find("point-cloud-processing").scope).toContain(
+      "complete Basics of Point-Cloud Processing",
+    );
+    expect(find("gps-imu-pose-fusion").scope).toContain("complete Part 3");
+    expect(find("gemini-vla-example").scope).toContain("overview video");
+  });
+
+  it("omits duplicate introductions and peripheral interviews and talks from the learning path", () => {
+    const omitted = [
+      "ros-overview",
+      "begin-robotics",
+      "meet-ethan",
+      "agri-robotics",
+      "jim-fan-challenge",
+      "meet-tom",
+      "better-robots",
+    ];
+    const currentResourceIds = sections.flatMap((section) =>
+      section.resources.map((resource) => resource.id),
+    );
+    expect(currentResourceIds.some((id) => omitted.includes(id))).toBe(false);
+    // Historical source definitions remain available for backup recovery.
+    expect(
+      legacyCurriculum.flatMap((stage) => stage.resources.map((item) => item.id)),
+    ).toEqual(expect.arrayContaining(omitted));
   });
 });

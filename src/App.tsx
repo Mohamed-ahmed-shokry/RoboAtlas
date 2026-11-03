@@ -11,7 +11,7 @@ import {
   Sun,
   X,
 } from "lucide-react";
-import { coreSections, optionalResources, roadmap } from "./data/roadmap";
+import { coreSections, roadmap } from "./data/roadmap";
 import type { ContentLabel } from "./legacy/curriculum";
 import {
   continueLearning,
@@ -21,9 +21,9 @@ import {
 } from "./lib/progress";
 import type { CompletionFilter, Filters } from "./lib/progress";
 import { useProgress } from "./lib/useProgress";
+import { loadSidebarCollapsed, saveSidebarCollapsed } from "./lib/sidebarPreference";
 import { Sidebar } from "./components/Sidebar";
 import { RoadmapStage } from "./components/RoadmapStage";
-import { ResourceLink } from "./components/SectionRow";
 import { BackupDialog } from "./components/BackupDialog";
 
 const emptyFilters: Filters = { query: "", completion: "all", label: "all" };
@@ -43,11 +43,12 @@ export default function App() {
   );
   const [notice, setNotice] = useState("");
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(loadSidebarCollapsed);
   const overall = countProgress(sectionIds, progress.completed);
   const next = continueLearning(progress);
+  const searching = filters.query.trim() !== "";
   const filtering =
-    filters.query.trim() !== "" ||
+    searching ||
     filters.completion !== "all" ||
     filters.label !== "all";
   const visible = coreSections.filter(({ section }) =>
@@ -103,7 +104,11 @@ export default function App() {
             title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
             aria-expanded={!sidebarCollapsed}
             aria-controls="roadmap-sidebar"
-            onClick={() => setSidebarCollapsed((collapsed) => !collapsed)}
+            onClick={() => {
+              const collapsed = !sidebarCollapsed;
+              setSidebarCollapsed(collapsed);
+              saveSidebarCollapsed(collapsed);
+            }}
           >
             {sidebarCollapsed ? (
               <PanelLeftOpen size={18} aria-hidden="true" />
@@ -301,6 +306,7 @@ export default function App() {
               );
               const expanded =
                 progress.expanded.includes(stage.id) ||
+                searching ||
                 (filtering && !stageComplete);
               return (
                 sections.length > 0 && (
@@ -310,6 +316,7 @@ export default function App() {
                     number={index + 1}
                     sections={sections}
                     expanded={expanded}
+                    searching={searching}
                     completed={progress.completed}
                     currentSectionId={next?.section.id ?? null}
                     onExpand={() => {
@@ -369,16 +376,24 @@ export default function App() {
               </button>
             </div>
           )}
-          <details className="optional-resources">
-            <summary>
-              Optional resources<span>{optionalResources.length}</span>
-            </summary>
-            <div className="optional-resource-list">
-              {optionalResources.map((resource) => (
-                <ResourceLink key={resource.id} resource={resource} />
-              ))}
-            </div>
-          </details>
+          <footer className="profile-links" aria-label="Author profiles">
+            <a
+              href="https://github.com/Mohamed-ahmed-shokry"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Mohamed Shokry on GitHub (opens in a new tab)"
+            >
+              GitHub
+            </a>
+            <a
+              href="https://www.linkedin.com/in/mohamed-shokry-8a2a0a1ab/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Mohamed Shokry on LinkedIn (opens in a new tab)"
+            >
+              LinkedIn
+            </a>
+          </footer>
           <div className="sr-only" aria-live="polite">
             {notice}
           </div>

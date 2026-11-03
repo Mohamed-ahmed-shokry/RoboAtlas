@@ -169,6 +169,13 @@ describe("the updated exploration curriculum", () => {
         ).toBeTruthy();
         const start = seconds(range![1]);
         const end = seconds(range![2]);
+        for (const resource of find(id).resources) {
+          if (resource.url.startsWith("https://www.youtube.com/watch?")) {
+            expect(resource.startSeconds, id + ": " + resource.id).toBe(start);
+          } else {
+            expect(resource.startSeconds).toBeUndefined();
+          }
+        }
         expect(
           start,
           `${id} must start where the previous section finished`,

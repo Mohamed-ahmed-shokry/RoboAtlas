@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ArrowUpRight, ChevronRight } from "lucide-react";
 import type { LearningResource, LearningSection } from "../data/roadmap";
+import { resourceHref } from "../lib/resourceLinks";
 
 export function ResourceLink({
   resource,
@@ -13,7 +14,7 @@ export function ResourceLink({
     <div className="section-resource">
       <a
         className="section-resource-link"
-        href={resource.url}
+        href={resourceHref(resource)}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={"Open " + resource.title + " in a new tab"}

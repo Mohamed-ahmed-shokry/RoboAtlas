@@ -7,6 +7,7 @@ export interface LearningResource {
   url: string;
   label: ContentLabel;
   scope?: string;
+  startSeconds?: number;
 }
 
 export interface LearningSection {
@@ -50,6 +51,10 @@ function resource(
   label: ContentLabel = "Technical",
 ): LearningResource {
   return { id, title, creator, url, label };
+}
+
+function atTime(source: LearningResource, startSeconds: number): LearningResource {
+  return { ...source, startSeconds };
 }
 
 // Canonical metadata is reused across distinct assigned scopes; section IDs never derive from positions.
@@ -642,14 +647,14 @@ export const roadmap: RoadmapStage[] = [
       learn(
         "robot-examples-definitions",
         "Robot examples and definitions",
-        [sources.princeton, sources.princetonCourse],
+        [atTime(sources.princeton, 0), sources.princetonCourse],
         "Watch 00:00–18:56.",
         ["princeton-lecture-one"],
       ),
       learn(
         "robot-anatomy-uncertainty",
         "Anatomy, feedback, and uncertainty",
-        [sources.princeton, sources.princetonCourse],
+        [atTime(sources.princeton, 1136), sources.princetonCourse],
         "Watch 18:56–36:59.",
         ["princeton-lecture-one"],
       ),
@@ -685,13 +690,13 @@ export const roadmap: RoadmapStage[] = [
       learn(
         "motor-control-chain",
         "The motor-control chain",
-        [sources.motors],
+        [atTime(sources.motors, 0)],
         "Watch 00:00–15:56.",
       ),
       learn(
         "motor-encoders-software",
         "Encoders and software interfaces",
-        [sources.motors],
+        [atTime(sources.motors, 956)],
         "Watch 15:56–25:56.",
       ),
       learn(
@@ -724,13 +729,13 @@ export const roadmap: RoadmapStage[] = [
       learn(
         "duck-mechanical-assembly",
         "Starting a walking-robot build",
-        [sources.duck],
+        [atTime(sources.duck, 0)],
         "Watch 00:00–07:26.",
       ),
       learn(
         "duck-electronics-integration",
         "Electronics, integration, and build failures",
-        [sources.duck],
+        [atTime(sources.duck, 446)],
         "Watch 07:26–13:57.",
       ),
       practice(
@@ -816,13 +821,13 @@ export const roadmap: RoadmapStage[] = [
       learn(
         "encoder-reading",
         "Reading an encoder",
-        [sources.motorEncoder, sources.motorCompanion],
+        [atTime(sources.motorEncoder, 0), sources.motorCompanion],
         "Watch 00:00–02:53. Read Parts 1–2 of the companion.",
       ),
       learn(
         "encoder-pid-loop",
         "Closing the motor-position loop",
-        [sources.motorEncoder, sources.motorCompanion, sources.motorCode],
+        [atTime(sources.motorEncoder, 173), sources.motorCompanion, sources.motorCode],
         "Watch 02:53–09:30. Read from Part 3 to the end of the companion.",
       ),
       learn(
@@ -935,25 +940,25 @@ export const roadmap: RoadmapStage[] = [
       learn(
         "ros2-environment-executables",
         "Sourcing and executables",
-        [sources.rosCourse],
+        [atTime(sources.rosCourse, 0)],
         "Watch 00:00–09:46. Use the Jazzy installation guide for practice.",
       ),
       learn(
         "ros2-nodes-topics",
         "Nodes and topics",
-        [sources.rosCourse],
+        [atTime(sources.rosCourse, 586)],
         "Watch 09:46–16:56.",
       ),
       learn(
         "ros2-services-parameters",
         "Services and parameters",
-        [sources.rosCourse],
+        [atTime(sources.rosCourse, 1016)],
         "Watch 16:56–24:24.",
       ),
       learn(
         "ros2-actions",
         "Actions",
-        [sources.rosCourse],
+        [atTime(sources.rosCourse, 1464)],
         "Watch 24:24–28:02.",
       ),
     ],
@@ -967,25 +972,25 @@ export const roadmap: RoadmapStage[] = [
       learn(
         "ros2-workspaces-packages",
         "Workspaces, colcon, and packages",
-        [sources.rosCourse],
+        [atTime(sources.rosCourse, 1682)],
         "Watch 28:02–36:18.",
       ),
       learn(
         "ros2-cpp-publisher",
         "A C++ publisher and subscriber",
-        [sources.rosCourse, sources.rosTutorials],
+        [atTime(sources.rosCourse, 2178), sources.rosTutorials],
         "Watch 36:18–44:13. Use the linked Jazzy C++ example for practice.",
       ),
       learn(
         "ros2-python-publisher",
         "A Python publisher and subscriber",
-        [sources.rosCourse, sources.rosTutorials],
+        [atTime(sources.rosCourse, 2653), sources.rosTutorials],
         "Watch 44:13–49:44. Use the linked Jazzy Python example for practice.",
       ),
       learn(
         "ros2-launch-files",
         "Launch files",
-        [sources.rosCourse],
+        [atTime(sources.rosCourse, 2984)],
         "Watch 49:44–51:56.",
       ),
       practice(
@@ -1013,19 +1018,19 @@ export const roadmap: RoadmapStage[] = [
       learn(
         "ros2-urdf",
         "URDF links and joints",
-        [sources.rosCourse],
+        [atTime(sources.rosCourse, 3116)],
         "Watch 51:56–1:04:49.",
       ),
       learn(
         "ros2-xacro",
         "Xacro",
-        [sources.rosCourse],
+        [atTime(sources.rosCourse, 3889)],
         "Watch 1:04:49–1:11:23.",
       ),
       learn(
         "ros2-rviz",
         "RViz",
-        [sources.rosCourse],
+        [atTime(sources.rosCourse, 4283)],
         "Watch 1:11:23–1:17:44.",
       ),
       learn(
@@ -1158,13 +1163,13 @@ export const roadmap: RoadmapStage[] = [
       learn(
         "ball-detection-node",
         "Detecting the ball",
-        [sources.ball, sources.ballCompanion],
+        [atTime(sources.ball, 0), sources.ballCompanion],
         "Watch 00:00–12:36. Read the companion from the beginning to just before “Following the ball”.",
       ),
       learn(
         "ball-following-node",
         "Turning detections into movement",
-        [sources.ball, sources.ballCompanion],
+        [atTime(sources.ball, 756), sources.ballCompanion],
         "Watch 12:36–28:23. Read from “Following the ball” through “Conclusion and Improvements”.",
       ),
     ],
@@ -1386,7 +1391,7 @@ export const roadmap: RoadmapStage[] = [
       learn(
         "moveit-planning-basics",
         "MoveIt planning and visualization",
-        [sources.moveit, sources.moveitCompanion, sources.moveitReference],
+        [atTime(sources.moveit, 0), sources.moveitCompanion, sources.moveitReference],
         "Watch 00:00–31:24. Read the companion from the beginning to just before “Pick and Place with MoveIt Task Constructor”.",
         undefined,
         45,
@@ -1394,7 +1399,7 @@ export const roadmap: RoadmapStage[] = [
       learn(
         "moveit-task-stages",
         "Task Constructor stages and picking",
-        [sources.moveit, sources.moveitCompanion],
+        [atTime(sources.moveit, 1884), sources.moveitCompanion],
         "Watch 31:24–52:34. Read from “Pick and Place with MoveIt Task Constructor” to just before “End-to-end Pick and Place”.",
         undefined,
         40,
@@ -1402,7 +1407,7 @@ export const roadmap: RoadmapStage[] = [
       learn(
         "moveit-end-to-end",
         "Connecting pick and place",
-        [sources.moveit, sources.moveitCompanion],
+        [atTime(sources.moveit, 3154), sources.moveitCompanion],
         "Watch 52:34–1:01:54. Read from “End-to-end Pick and Place” through “MoveIt Overall”.",
       ),
       practice(
@@ -1432,13 +1437,13 @@ export const roadmap: RoadmapStage[] = [
       learn(
         "arduino-demonstrations",
         "Driving demonstrations and features",
-        [sources.arduinoLearning, sources.arduinoCompanion],
+        [atTime(sources.arduinoLearning, 0), sources.arduinoCompanion],
         "Watch 00:00–03:34. Read the companion from the beginning to just before “Training the classifier”.",
       ),
       learn(
         "arduino-policy-rollout",
         "A learned driving policy",
-        [sources.arduinoLearning, sources.arduinoCompanion],
+        [atTime(sources.arduinoLearning, 214), sources.arduinoCompanion],
         "Watch 03:34–12:30. Read from “Training the classifier” through “RACING!!!”.",
       ),
       learn(
@@ -1456,7 +1461,7 @@ export const roadmap: RoadmapStage[] = [
       learn(
         "act-architecture",
         "ACT architecture and action chunks",
-        [sources.act, sources.actDocs],
+        [atTime(sources.act, 0), sources.actDocs],
         "Watch 00:00–29:07. Read the ACT documentation from the beginning to just before “Training ACT”.",
         undefined,
         45,
@@ -1464,7 +1469,7 @@ export const roadmap: RoadmapStage[] = [
       learn(
         "act-training-evaluation",
         "ACT training, inference, and evaluation",
-        [sources.act, sources.actDocs],
+        [atTime(sources.act, 1747), sources.actDocs],
         "Watch 29:07–55:33. Read from “Training ACT” through “Evaluating ACT”.",
         undefined,
         45,
@@ -1714,13 +1719,13 @@ export const roadmap: RoadmapStage[] = [
       learn(
         "vla-architecture",
         "From language and vision to actions",
-        [sources.vla],
+        [atTime(sources.vla, 0)],
         "Watch 00:00–16:47.",
       ),
       learn(
         "vla-training-workflow",
         "VLA training and fine-tuning preparation",
-        [sources.vla],
+        [atTime(sources.vla, 1007)],
         "Watch 16:47–35:06.",
       ),
       learn(

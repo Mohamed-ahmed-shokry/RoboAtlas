@@ -1,7 +1,7 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { SectionRow } from "../src/components/SectionRow";
+import { ResourceLink, SectionRow } from "../src/components/SectionRow";
 import { RoadmapStage } from "../src/components/RoadmapStage";
 import type {
   LearningSection,
@@ -32,6 +32,23 @@ const section: LearningSection = {
 };
 
 describe("section-based interface", () => {
+  it("renders the assigned video time without changing companion links", () => {
+    const html = renderToStaticMarkup(createElement(ResourceLink, {
+      resource: {
+        ...section.resources[0],
+        url: "https://www.youtube.com/watch?v=example",
+        startSeconds: 1136,
+      },
+    }));
+    expect(html).toContain('href="https://www.youtube.com/watch?v=example&amp;t=1136s"');
+    expect(html).toContain('target="_blank"');
+    const companion = renderToStaticMarkup(createElement(ResourceLink, {
+      resource: section.resources[1],
+    }));
+    expect(companion).toContain('href="https://example.com/reading"');
+    expect(companion).not.toContain("?t=");
+  });
+
   it("counts a multi-resource section once and keeps resource links separate", () => {
     const html = renderToStaticMarkup(
       createElement(SectionRow, {
